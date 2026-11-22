@@ -1,0 +1,31 @@
+flowchart LR
+    subgraph Host ["Developer Workstation / Docker Compose"]
+        subgraph FrontendContainer ["Frontend Service (Port 5173)"]
+            ReactApp["React 18 + TypeScript Shell"]
+            QueryClient["TanStack Query Client"]
+            UIComp["Shadcn / Tailwind Components"]
+        end
+
+        subgraph BackendContainer ["Backend Service (Port 8000)"]
+            FastAPIApp["FastAPI Modular Application"]
+            Middleware["RequestID & CORS Middleware"]
+            CoreConfig["Pydantic v2 Settings"]
+            HealthSvc["Health & Readiness Service"]
+            FutureServices["Services (Ingestion, Hybrid Search, LangGraph, Validator)"]
+        end
+
+        subgraph DatabaseContainer ["Database Service (Port 5432)"]
+            PG["PostgreSQL 16 Engine"]
+            PGVector["pgvector Extension (384-dim)"]
+            FTS["PostgreSQL Full-Text Search (tsvector)"]
+            PGVolume[("Persistent Docker Volume\ncatalist_postgres_data")]
+        end
+    end
+
+    ReactApp -->|HTTP Fetch /api/v1/*| FastAPIApp
+    FastAPIApp --> Middleware
+    FastAPIApp --> HealthSvc
+    HealthSvc -->|SELECT 1 (5s timeout)| PG
+    PG --> PGVector
+    PG --> FTS
+    PG --- PGVolume

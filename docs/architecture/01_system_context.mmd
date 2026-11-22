@@ -1,0 +1,15 @@
+flowchart TB
+    User["End User / Evaluator"]
+    WebUI["Catalist Web Application (React + Vite)"]
+    BackendAPI["Backend API (FastAPI / Modular Monolith)"]
+    Postgres[("PostgreSQL 16 + pgvector\n(Transcripts, Turns, Embeddings, Memory)")]
+    Ollama["Local LLM (Ollama / llama3.2)"]
+    Gemini["Hosted LLM (Optional Gemini Free Tier)"]
+    LangSmith["LangSmith Tracing (Optional Developer Telemetry)"]
+
+    User -->|Views status, submits questions, reviews briefs| WebUI
+    WebUI -->|REST / JSON API with Request IDs| BackendAPI
+    BackendAPI -->|SQLAlchemy / psycopg3 - Hybrid Queries| Postgres
+    BackendAPI -->|Offline / Local Inference| Ollama
+    BackendAPI -.->|Optional Cloud Inference| Gemini
+    BackendAPI -.->|Metadata & Run Traces (No raw transcripts)| LangSmith

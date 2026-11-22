@@ -1,0 +1,29 @@
+sequenceDiagram
+    autonumber
+    actor Client as Frontend / Browser
+    participant Gateway as FastAPI Application
+    participant Middleware as RequestID Middleware
+    participant ReadyEndpoint as /api/v1/ready
+    participant Service as HealthService
+    participant DB as PostgreSQL 16 (pgvector)
+
+    Client->>Gateway: GET /api/v1/ready (Optional X-Request-ID)
+    Gateway->>Middleware: Intercept incoming request
+    alt X-Request-ID present and valid
+        Middleware->>Middleware: Bind request_id to context
+    else X-Request-ID missing or invalid
+        Middleware->>Middleware: Generate new UUIDv4 request_id
+    end
+    Middleware->>ReadyEndpoint: Dispatch request
+    ReadyEndpoint->>Service: check_readiness(db_session)
+    Service->>DB: Execute SELECT 1 (timeout=5.0s)
+    alt Database responds OK
+        DB-->>Service: 1 (Connected)
+        Service-->>ReadyEndpoint: ReadinessStatus(status="ready", database=True)
+        ReadyEndpoint-->>Middleware: 200 OK + JSON body
+    else Database connection fails / times out
+        DB-->>Service: ConnectionError / Timeout
+        Service-->>ReadyEndpoint: ReadinessStatus(status="degraded", database=False)
+        ReadyEndpoint-->>Middleware: 503 Service Unavailable + JSON body
+    end
+    Middleware->>Client: Return Response + X-Request-ID header

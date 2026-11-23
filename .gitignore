@@ -50,6 +50,11 @@ postgres_data/
 *.sqlite3
 *.db
 
+# Extracted dataset artifacts (reproducible from data/raw/Catalist_AI_Intern_Build_Test_Data.zip)
+data/raw/*.txt
+!data/raw/CREDITS.txt
+data/raw/transcripts/
+
 # Operating System & IDE
 .DS_Store
 Thumbs.db

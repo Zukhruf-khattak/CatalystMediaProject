@@ -1,0 +1,55 @@
+flowchart TD
+    subgraph Input["Input Sources"]
+        ZIP["data/raw/Catalist_AI_Intern_Build_Test_Data.zip"]
+        TXT["data/raw/*.txt (138 Meeting Transcripts)"]
+        Q["data/raw/questions.json (25 Benchmark Questions)"]
+    end
+
+    subgraph Security["Archive Safety & Validation"]
+        V1["Path Traversal Check (No '..' or absolute paths)"]
+        V2["Extension Whitelist (.txt, .json)"]
+        V3["Resource Limits (Max 50MB, Max 500 files)"]
+        V4["SHA-256 Checksum Calculation"]
+    end
+
+    subgraph Parser["Deterministic Transcript Parser"]
+        P1["Metadata Header Extraction (Meeting, Team, Sequence)"]
+        P2["Speaker Roster Resolution (Speakers A-D, Roles)"]
+        P3["Turn Header Matching (HH:MM:SS Speaker X)"]
+        P4["Verbatim Utterance Collection (Preserve fillers/disfluencies)"]
+        P5["Text Normalization for Search (Clean whitespace/casing)"]
+    end
+
+    subgraph Embedding["Local Dense Vector Pipeline"]
+        E1["sentence-transformers/all-MiniLM-L6-v2 (CPU)"]
+        E2["Batch Encoding (batch_size=32, norm=True)"]
+        E3["384-Dimensional Dense Embeddings"]
+        E4["Zero-Vector Handling for Empty Turns"]
+    end
+
+    subgraph Persistence["PostgreSQL 16 + pgvector Storage"]
+        T["teams (UUID, team_code)"]
+        M["meetings (UUID, meeting_code, turns, raw_text, SHA-256)"]
+        S["speakers (UUID, meeting_id, speaker_label, role)"]
+        TT["transcript_turns (UUID, turn_index, raw_text, search_vector, embedding)"]
+        J["ingestion_jobs (UUID, status, metrics, errors_json)"]
+    end
+
+    subgraph Indexing["Indexing & Retrieval Engines"]
+        GIN["GIN Index on search_vector (pg_catalog.english)"]
+        TRG["Trigger: tsvector_update_trigger(search_vector, raw_text)"]
+        HNSW["HNSW Index on embedding (vector_cosine_ops)"]
+    end
+
+    ZIP --> Security
+    Security --> TXT
+    TXT --> Parser
+    Parser --> P1 & P2 & P3 & P4 & P5
+    P4 --> Embedding
+    Embedding --> E1 --> E2 --> E3
+    P1 --> T & M
+    P2 --> S
+    P3 & P4 & P5 --> TT
+    E3 --> TT
+    TT --> GIN & TRG & HNSW
+    M & TT --> J

@@ -118,6 +118,52 @@ class Settings(BaseSettings):
         description="Log output formatting style",
     )
 
+    # Dataset & Ingestion Configuration (Phase 2)
+    dataset_dir: str = Field(
+        default="data/raw",
+        description="Root directory containing raw meeting transcripts and questions",
+    )
+    dataset_archive_path: str = Field(
+        default="data/raw/Catalist_AI_Intern_Build_Test_Data.zip",
+        description="Path to supplied dataset zip archive",
+    )
+    archive_max_size_bytes: int = Field(
+        default=52428800,  # 50 MB
+        description="Maximum allowed compressed archive size in bytes",
+    )
+    archive_max_extracted_files: int = Field(
+        default=500,
+        description="Maximum number of files allowed in dataset extraction",
+    )
+    parser_version: str = Field(
+        default="1.0.0",
+        description="Deterministic transcript parser version tag",
+    )
+    fts_language_config: str = Field(
+        default="english",
+        description="PostgreSQL tsvector text search configuration",
+    )
+
+    # Embedding Configuration (sentence-transformers/all-MiniLM-L6-v2)
+    embedding_model_name: str = Field(
+        default="sentence-transformers/all-MiniLM-L6-v2",
+        description="HuggingFace model identifier for local embeddings",
+    )
+    embedding_dim: int = Field(
+        default=384,
+        description="Expected embedding vector dimension for all-MiniLM-L6-v2",
+    )
+    embedding_batch_size: int = Field(
+        default=32,
+        ge=1,
+        le=256,
+        description="Batch size for generating embeddings",
+    )
+    embedding_device: str = Field(
+        default="cpu",
+        description="Compute device for local embedding inference (cpu)",
+    )
+
 
 @lru_cache()
 def get_settings() -> Settings:

@@ -1,6 +1,6 @@
 # Catalist Meeting Intelligence Agent
 
-[![Phase](https://img.shields.io/badge/Phase%201-Foundation%20Ready-brightgreen)](#current-phase-status)
+[![Phase](https://img.shields.io/badge/Phase%202-Ingestion%20%26%20Indexing%20Ready-brightgreen)](#current-phase-status)
 [![Python](https://img.shields.io/badge/Python-3.12-blue)](https://www.python.org/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-009688)](https://fastapi.tiangolo.com/)
 [![React](https://img.shields.io/badge/React-18-61dafb)](https://react.dev/)
@@ -23,19 +23,18 @@ Evaluated on the **AMI Meeting Corpus** (138 real meetings, ~676,000 words acros
 
 ---
 
-## Current Phase Status: Phase 1 Complete
-Phase 1 establishes the engineering foundation, architecture baseline, and verified repository setup:
-- [x] Layered FastAPI backend with health and readiness probes.
-- [x] React + Vite + TypeScript frontend shell displaying real system status.
-- [x] Docker Compose configuration for PostgreSQL 16 + pgvector with health checks.
-- [x] Alembic migration suite configuring pgvector extension.
-- [x] Typed settings with Pydantic v2 and safe `.env.example`.
-- [x] Structured JSON logging, UUID request-ID middleware, and centralized exception handling.
-- [x] Safe, optional LangSmith developer tracing integration.
-- [x] Comprehensive documentation suite and ADRs under `docs/`.
-- [x] Automated test suite passing for backend and frontend.
+## Current Phase Status: Phase 2 Complete
+- [x] **Safe Archive Discovery & Ingestion**: Defends against Zip Slip directory traversal; extracts and validates 138 AMI transcripts across 35 design teams.
+- [x] **Deterministic Transcript Parser**: Parses metadata headers, speaker rosters, and turn boundaries while strictly preserving verbatim disfluencies, fillers, and speech cuts.
+- [x] **Relational Persistence**: PostgreSQL schema for `teams`, `meetings`, `speakers`, `transcript_turns`, and `ingestion_jobs` with foreign keys and cascading deletes.
+- [x] **Local Dense Vector Embeddings**: CPU-compatible `sentence-transformers/all-MiniLM-L6-v2` dense vectors (384 dimensions) with HNSW index.
+- [x] **PostgreSQL Full-Text Search**: Native `tsvector` maintained via C-trigger `tsvector_update_trigger` and indexed with GIN.
+- [x] **Idempotency & Resumability**: Content-based SHA-256 checks skip unchanged transcripts; `--force` enables clean updates.
+- [x] **Fault Isolation**: Per-meeting transaction savepoints isolate malformed files without rolling back valid meetings.
+- [x] **Ingestion CLI & REST API**: Comprehensive CLI (`python -m app.cli ingest`) and management endpoints (`/api/v1/ingestion/jobs`, `/api/v1/ingestion/stats`).
+- [x] **Automated Tests**: 48 backend tests and 8 frontend tests passing (56 total).
 
-*Transcript parsing, embeddings, memory extraction, LangGraph research, and citation validation are scheduled for subsequent phases.*
+*Phase 3 (Memory Extraction & Temporal Reasoning), Phase 4 (Hybrid Retrieval), and Phase 5 (LangGraph Agent) are scheduled next.*
 
 ---
 
@@ -146,6 +145,22 @@ cd frontend && npm run build
 
 ---
 
+## Dataset Ingestion CLI
+
+To ingest transcripts and compute local dense embeddings:
+```bash
+# From backend directory
+python -m app.cli ingest --dataset-path ../data/raw
+
+# Run fast text-only ingestion (skip embeddings for testing):
+python -m app.cli ingest --dataset-path ../data/raw --skip-embeddings
+
+# Force re-ingestion of already processed meetings:
+python -m app.cli ingest --dataset-path ../data/raw --force
+```
+
+---
+
 ## Next Steps
-Proceed to **Phase 2: Dataset Ingestion and Preprocessing** (`docs/prompts/PHASE_02_DATASET_INGESTION.md`).
+Proceed to **Phase 3: Memory System & Temporal Architecture** (`docs/prompts/PHASE_03_MEMORY_SYSTEM.md`).
 

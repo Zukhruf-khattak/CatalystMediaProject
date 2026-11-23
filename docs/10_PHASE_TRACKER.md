@@ -4,9 +4,9 @@
 
 | Phase | Title | Status | Prompt Link | Dependencies | Key Outcome |
 |---|---|---|---|---|---|
-| **01** | **Repository Foundation, Architecture Baseline & Engineering Setup** | **In Progress** | [PHASE_01_FOUNDATION.md](./prompts/PHASE_01_FOUNDATION.md) | Brief, Dataset inspection | Repository layout, FastAPI + React shells, Docker Compose, Alembic pgvector, CI/Tests, Docs |
-| **02** | **Dataset Ingestion and Preprocessing** | **Ready** | [PHASE_02_DATASET_INGESTION.md](./prompts/PHASE_02_DATASET_INGESTION.md) | Phase 1 | 138 transcripts parsed into PostgreSQL speaker-turns, local embeddings, lexical indexes |
-| **03** | **Memory System & Temporal Architecture** | **Planned** | `PHASE_03_MEMORY_SYSTEM.md` | Phase 2 | Short-term + long-term memory schemas, decision lifecycle tracking |
+| **01** | **Repository Foundation, Architecture Baseline & Engineering Setup** | **Completed** | [PHASE_01_FOUNDATION.md](./prompts/PHASE_01_FOUNDATION.md) | Brief, Dataset inspection | Repository layout, FastAPI + React shells, Docker Compose, Alembic pgvector, CI/Tests, Docs |
+| **02** | **Dataset Ingestion and Preprocessing** | **Completed** | [PHASE_02_DATASET_INGESTION.md](./prompts/PHASE_02_DATASET_INGESTION.md) | Phase 1 | 138 transcripts parsed into PostgreSQL speaker-turns, local embeddings, lexical indexes |
+| **03** | **Memory System & Temporal Architecture** | **Ready** | `PHASE_03_MEMORY_SYSTEM.md` | Phase 2 | Short-term + long-term memory schemas, decision lifecycle tracking |
 | **04** | **Hybrid Retrieval & Evidence Packs** | **Planned** | `PHASE_04_HYBRID_RETRIEVAL.md` | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
 | **05** | **LangGraph Multi-Step Research Agent** | **Planned** | `PHASE_05_LANGGRAPH_AGENT.md` | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
 | **06** | **Deterministic Citation Validation** | **Planned** | `PHASE_06_CITATION_VALIDATION.md` | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
@@ -33,4 +33,23 @@
 - [x] Complete documentation suite under `docs/` and ADRs under `docs/decisions/`.
 - [x] Zero paid API keys required.
 - [x] No premature implementation of Phase 2 ingestion or agent logic.
+
+---
+
+## Phase 2 Acceptance Gate Checklist
+- [x] Dataset archive discovered and validated (`data/raw/Catalist_AI_Intern_Build_Test_Data.zip`).
+- [x] Path traversal and zip slip protections implemented and tested.
+- [x] Deterministic transcript parser parses headers, speaker rosters, and turn boundaries.
+- [x] Exact raw speech text preserved verbatim including disfluencies and fillers.
+- [x] Speaker identity strictly scoped per meeting (`uq_speaker_meeting_label`).
+- [x] Database migration created and verified (`002_dataset_ingestion_schema`).
+- [x] PostgreSQL pgvector extension enabled with HNSW index on `embedding (vector(384))`.
+- [x] PostgreSQL full-text search enabled with GIN index on `search_vector (tsvector)`.
+- [x] Ingestion is idempotent with SHA-256 checks skipping unchanged files.
+- [x] Fault isolation per meeting with nested transaction savepoints.
+- [x] Local embeddings generated on CPU via `sentence-transformers/all-MiniLM-L6-v2`.
+- [x] Ingestion CLI (`app.cli ingest`) and REST API (`/api/v1/ingestion/jobs`) implemented.
+- [x] All 48 backend tests and 8 frontend tests passing (56 total).
+- [x] Comprehensive documentation deliverables completed.
+- [x] Zero premature Phase 3 features introduced.
 

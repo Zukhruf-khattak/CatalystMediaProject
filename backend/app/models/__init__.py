@@ -1,6 +1,19 @@
-from app.db.base import Base
+from app.models.dataset import (
+    CrossDialectTSVector,
+    CrossDialectVector,
+    IngestionJob,
+    Meeting,
+    Speaker,
+    Team,
+    TranscriptTurn,
+)
 
-# Minimal foundation models package.
-# Domain entities (meetings, speaker turns, memory items) will be added in Phase 2 & 3.
-__all__ = ["Base"]
-
+__all__ = [
+    "Team",
+    "Meeting",
+    "Speaker",
+    "TranscriptTurn",
+    "IngestionJob",
+    "CrossDialectVector",
+    "CrossDialectTSVector",
+]

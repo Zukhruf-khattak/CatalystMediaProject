@@ -107,3 +107,4 @@ stateDiagram-v2
 3. **Substring Matching**: The normalized quote string must appear verbatim in the referenced `TranscriptTurn.raw_text`.
 4. **Speaker Verification**: The candidate's `speaker_label` must match the turn's speaker.
 5. **Action Ownership Guard**: If an action specifies an owner, the owner's name, role, or speaker letter must be present in the turn text.
+

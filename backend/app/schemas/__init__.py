@@ -19,6 +19,15 @@ from app.schemas.memory import (
     MemorySearchFilter,
     MemorySearchResponse,
 )
+from app.schemas.retrieval import (
+    EvidencePackResponse,
+    MemoryEvidenceItem,
+    ProcessedQuery,
+    RetrievalFilter,
+    RetrievalMethod,
+    RetrievalRequest,
+    TranscriptEvidenceItem,
+)
 
 __all__ = [
     "ParsedSpeaker",
@@ -38,4 +47,11 @@ __all__ = [
     "MemorySearchResponse",
     "MemoryExtractionRequest",
     "MemoryExtractionRunResponse",
+    "RetrievalMethod",
+    "RetrievalFilter",
+    "ProcessedQuery",
+    "RetrievalRequest",
+    "TranscriptEvidenceItem",
+    "MemoryEvidenceItem",
+    "EvidencePackResponse",
 ]

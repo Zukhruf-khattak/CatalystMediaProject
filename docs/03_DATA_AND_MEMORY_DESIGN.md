@@ -119,3 +119,14 @@ The `EvidenceValidator` enforces:
 2. **Verbatim Substring**: The normalized quotation must appear verbatim in `TranscriptTurn.raw_text`.
 3. **Speaker Consistency**: The stated speaker label must match the speaker associated with the referenced turn.
 4. **Action Ownership Guard**: If an action specifies an owner, the owner must be explicitly named or addressed in the utterance.
+
+---
+
+## 6. Hybrid Retrieval and Memory Feeding (Phase 4)
+
+The temporal memory store directly feeds into the Phase 4 `HybridRetrievalService`:
+1. **Direct Memory Retrieval**: Queries targeting decisions, action owners, requirements, or disagreements query the `memories` table directly using lexical statement/quote matching and semantic similarity over `Memory.embedding`.
+2. **Temporal Relationship Graph Traversal**: When an atomic memory is matched (e.g. an initial design decision from Meeting `a`), the retrieval pipeline traverses its directed relationships:
+   - Outgoing `supersedes`, `updates`, `resolves`: Identifies newer replacement decisions or resolutions in Meeting `c` or `d`.
+   - Incoming `superseded_by`, `updated_by`, `reopened_by`: Identifies the origin rationale if a newer memory is matched first.
+3. **Evidence Packaging**: The traversed memory cluster is bundled into `MemoryEvidenceItem` objects containing both the exact transcript quotation, meeting reference, turn index, and complete chronological relationship graph (`linked_memory_ids`), providing the downstream reasoning agent with temporal context.

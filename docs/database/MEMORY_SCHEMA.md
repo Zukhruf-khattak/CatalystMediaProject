@@ -125,3 +125,4 @@ erDiagram
 - Metric Counters: `total_turns_analyzed`, `total_memories_extracted`, `total_memories_validated`, `total_memories_rejected`, `total_relationships_created`.
 - `errors_json` (JSON): List of candidate rejections and errors with verbatim citation failure reasons.
 - `summary_json` (JSON): Run summary metadata.
+

@@ -7,7 +7,7 @@
 | **01** | **Repository Foundation, Architecture Baseline & Engineering Setup** | **Completed** | [PHASE_01_FOUNDATION.md](./prompts/PHASE_01_FOUNDATION.md) | Brief, Dataset inspection | Repository layout, FastAPI + React shells, Docker Compose, Alembic pgvector, CI/Tests, Docs |
 | **02** | **Dataset Ingestion and Preprocessing** | **Completed** | [PHASE_02_DATASET_INGESTION.md](./prompts/PHASE_02_DATASET_INGESTION.md) | Phase 1 | 138 transcripts parsed into PostgreSQL speaker-turns, local embeddings, lexical indexes |
 | **03** | **Memory System & Temporal Architecture** | **Completed** | [PHASE_03_MEMORY_SYSTEM.md](./prompts/PHASE_03_MEMORY_SYSTEM.md) | Phase 2 | Persistent temporal memory, decision supersession, exact quotation validation, retrieval service |
-| **04** | **Hybrid Retrieval & Evidence Packs** | **Ready** | `PHASE_04_HYBRID_RETRIEVAL.md` | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
+| **04** | **Hybrid Retrieval & Evidence Packs** | **Completed** | [PHASE_04_HYBRID_RETRIEVAL.md](./prompts/PHASE_04_HYBRID_RETRIEVAL.md) | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
 | **05** | **LangGraph Multi-Step Research Agent** | **Planned** | `PHASE_05_LANGGRAPH_AGENT.md` | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
 | **06** | **Deterministic Citation Validation** | **Planned** | `PHASE_06_CITATION_VALIDATION.md` | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
 | **07** | **Team TS3012 Pre-Meeting Briefing** | **Planned** | `PHASE_07_TS3012_BRIEFING.md` | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
@@ -72,3 +72,21 @@
 - [x] Ruff linter and formatter passing with zero errors across all backend code.
 - [x] Architecture, database, operations, and tracker documentation updated.
 - [x] Zero Phase 4/5 code (LangGraph agent, TS3012 briefing) prematurely created.
+
+---
+
+## Phase 4 Acceptance Gate Checklist
+- [x] Query processor implemented (`QueryProcessor`) with deterministic team/meeting/speaker/topic extraction and temporal intent classification.
+- [x] Reciprocal Rank Fusion implemented (`rank_fusion.py`) with configurable $k=60$ and channel weights.
+- [x] Hybrid retrieval service implemented (`HybridRetrievalService`) combining PostgreSQL full-text search, pgvector semantic search, and memory graph traversal.
+- [x] Structured evidence pack response schema implemented (`EvidencePackResponse`, `TranscriptEvidenceItem`, `MemoryEvidenceItem`).
+- [x] Temporal graph traversal automatically links historical decisions with superseding decisions and captures open disagreements.
+- [x] REST API endpoints implemented (`/api/v1/retrieval/search` and `/api/v1/retrieval/process-query`).
+- [x] CLI subcommand implemented (`catalist retrieve`).
+- [x] Retrieval evaluation benchmark harness implemented (`backend/app/evaluation/retrieval_eval.py`).
+- [x] Empirical metrics benchmarked on the 25 assessment questions: Recall@10 = 82.0%, Precision@10 = 90.0%, MRR = 0.9000, Multi-Meeting Coverage = 90.0%, Latency = 97.0 ms.
+- [x] All 91 backend tests passing (100% pass rate) with zero failures.
+- [x] All 8 frontend tests passing in Vitest.
+- [x] Ruff linter and formatter passing with zero errors across all backend code.
+- [x] Comprehensive architectural documentation (`HYBRID_RETRIEVAL_PIPELINE.md`), operations runbook (`RETRIEVAL_RUNBOOK.md`), and evaluation report (`RETRIEVAL_EVALUATION.md`) completed.
+- [x] Zero Phase 5 code (LangGraph research agent, QA loops) prematurely created.

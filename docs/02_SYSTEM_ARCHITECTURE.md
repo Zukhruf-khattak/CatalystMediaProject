@@ -19,7 +19,7 @@ flowchart TD
             HealthService["Health & Ready Service (Phase 1)"]
             IngestService["Ingestion Service (Phase 2)"]
             MemoryService["Temporal Memory Service (Phase 3)"]
-            SearchService["Hybrid Search Engine (Phase 4)"]
+            SearchService["Hybrid Retrieval Engine (Phase 4)"]
             AgentService["LangGraph Orchestrator (Phase 5)"]
             CitationValidator["Citation Validator (Phase 6)"]
             BriefService["Briefing Service (Phase 7)"]

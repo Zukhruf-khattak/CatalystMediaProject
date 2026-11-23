@@ -18,8 +18,8 @@ This directory stores the complete, copy-paste-ready Antigravity implementation 
 | 01 | [PHASE_01_FOUNDATION.md](./PHASE_01_FOUNDATION.md) | Completed | Repository, backend/frontend shell, PostgreSQL, migrations, configuration, observability, docs and tests |
 | 02 | [PHASE_02_DATASET_INGESTION.md](./PHASE_02_DATASET_INGESTION.md) | Completed | Safe, idempotent, resumable transcript ingestion and indexing foundation |
 | 03 | [PHASE_03_MEMORY_SYSTEM.md](./PHASE_03_MEMORY_SYSTEM.md) | Completed | Persistent short-term and long-term temporal memory, supersession, exact quotation validation |
-| 04 | `PHASE_04_HYBRID_RETRIEVAL.md` | Planned | PostgreSQL FTS + pgvector retrieval and cross-meeting evidence packs |
-| 05 | `PHASE_05_LANGGRAPH_AGENT.md` | Planned | Stateful multi-step research agent with tool use and checkpoints |
+| 04 | [PHASE_04_HYBRID_RETRIEVAL.md](./PHASE_04_HYBRID_RETRIEVAL.md) | Completed | PostgreSQL FTS + pgvector hybrid retrieval with RRF and evidence packs |
+| 05 | [PHASE_05_LANGGRAPH_AGENT.md](./PHASE_05_LANGGRAPH_AGENT.md) | In Progress | Stateful multi-step research agent with tool use and checkpoints |
 | 06 | `PHASE_06_CITATION_VALIDATION.md` | Planned | Deterministic exact-quote and citation validation |
 | 07 | `PHASE_07_TS3012_BRIEFING.md` | Planned | Team TS3012 pre-meeting briefing generation |
 | 08 | `PHASE_08_REACT_FRONTEND.md` | Planned | Full research, answer review, and briefing UI |

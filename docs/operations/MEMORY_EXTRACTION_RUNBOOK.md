@@ -145,3 +145,4 @@ Response:
    - Speaker label mismatch: LLM attributed turn to Speaker A when Speaker C uttered the turn.
 2. **Ambiguous Relationships**: If team members use tentative language ("maybe we could think about..."), the relationship is marked with `is_ambiguous=True` and the prior decision remains `current`.
 3. **Database Integrity**: Deleting a meeting automatically cascades deletions to its memories, relationships, and turns. Older historical memories are never deleted during normal operation.
+

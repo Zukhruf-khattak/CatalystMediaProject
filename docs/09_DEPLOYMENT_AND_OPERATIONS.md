@@ -85,3 +85,17 @@ python -m app.cli extract-memory --meeting-code TS3006a --force
 ```bash
 python -m app.cli search-memory --team-code TS3006 --type DECISION --status current
 ```
+
+### Hybrid Retrieval Search
+```bash
+# Execute hybrid retrieval for a question
+catalist retrieve --query "Why did the team decide against using fruit shapes?" --team-code TS3006 --method hybrid --limit 10
+
+# Keyword-only retrieval
+catalist retrieve --query "kinetic battery" --method keyword --limit 5
+
+# Vector-only retrieval
+catalist retrieve --query "remote control casing material" --method vector --limit 5
+```
+
+For operational recovery, index maintenance, and latency monitoring runbooks, refer to [RETRIEVAL_RUNBOOK.md](./operations/RETRIEVAL_RUNBOOK.md).

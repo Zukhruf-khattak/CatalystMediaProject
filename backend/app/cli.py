@@ -9,7 +9,9 @@ from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.models.dataset import Meeting, Team
 from app.schemas.memory import MemorySearchFilter
+from app.schemas.retrieval import RetrievalRequest
 from app.scripts.ingest_dataset import main as run_ingest
+from app.services.hybrid_retrieval_service import HybridRetrievalService
 from app.services.memory_extraction_service import MemoryExtractionService
 from app.services.memory_retrieval_service import MemoryRetrievalService
 
@@ -90,6 +92,67 @@ def handle_search_memory(args: argparse.Namespace) -> None:
         db.close()
 
 
+def handle_retrieve(args: argparse.Namespace) -> None:
+    """CLI handler for executing hybrid retrieval."""
+    db = get_db_session(args.database_url)
+    service = HybridRetrievalService(db=db)
+
+    try:
+        req = RetrievalRequest(
+            query=args.query,
+            team_code=args.team_code,
+            method=args.method or "hybrid",
+            limit=args.limit,
+        )
+        pack = service.execute_retrieval(req)
+
+        print("\n" + "=" * 80)
+        print(f"QUERY: {pack.query}")
+        print(
+            f"EXTRACTED: Team={pack.processed_query.extracted_team} | "
+            f"Topics={pack.processed_query.extracted_topics} | "
+            f"Intent={pack.processed_query.temporal_intent}"
+        )
+        print(f"METHOD: {pack.retrieval_method} | TOTAL TURNS: {pack.total_results}")
+        if pack.cross_meeting_summary:
+            print(f"CROSS-MEETING EVIDENCE: {pack.cross_meeting_summary}")
+        print("=" * 80)
+
+        print("\n--- RETRIEVED TRANSCRIPT SEGMENTS ---")
+        for idx, turn in enumerate(pack.transcript_segments, 1):
+            role_str = f" ({turn.speaker_role})" if turn.speaker_role else ""
+            print(
+                f"[{idx}] {turn.meeting_code} (Turn {turn.turn_index}) | {turn.speaker_label}{role_str} at {turn.start_time_str} | Score: {turn.score}"
+            )
+            print(f'    "{turn.raw_text}"')
+            print("-" * 80)
+
+        if pack.temporal_memories:
+            print("\n--- RELATED TEMPORAL MEMORIES ---")
+            for idx, mem in enumerate(pack.temporal_memories, 1):
+                rels = [
+                    f"{r.relationship_type}->{str(r.target_memory_id)[:8]}"
+                    for r in mem.outgoing_relationships
+                ]
+                rel_str = f" | Links: {', '.join(rels)}" if rels else ""
+                print(
+                    f"[{idx}] {mem.meeting_code} | {mem.memory_type} | Status: {mem.status}{rel_str}"
+                )
+                print(f"    Statement: {mem.statement}")
+                print(f'    Quote:     "{mem.quote}"')
+                print("-" * 80)
+
+        if pack.unresolved_disagreements:
+            print("\n--- UNRESOLVED DISAGREEMENTS ---")
+            for idx, dis in enumerate(pack.unresolved_disagreements, 1):
+                print(f"[{idx}] {dis.meeting_code} | Status: {dis.status}")
+                print(f"    Issue: {dis.statement}")
+                print(f'    Quote: "{dis.quote}"')
+                print("-" * 80)
+    finally:
+        db.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="catalist",
@@ -158,6 +221,26 @@ def main() -> None:
         "--database-url", type=str, default=None, help="Optional database URL"
     )
 
+    # Retrieve subcommand
+    retrieve_parser = subparsers.add_parser(
+        "retrieve", help="Execute hybrid retrieval across meetings and memories"
+    )
+    retrieve_parser.add_argument(
+        "--query", type=str, required=True, help="Question or search query"
+    )
+    retrieve_parser.add_argument("--team-code", type=str, help="Target team code (e.g. TS3006)")
+    retrieve_parser.add_argument(
+        "--method",
+        type=str,
+        default="hybrid",
+        choices=["hybrid", "keyword", "vector"],
+        help="Retrieval channel",
+    )
+    retrieve_parser.add_argument("--limit", type=int, default=10, help="Max turns to return")
+    retrieve_parser.add_argument(
+        "--database-url", type=str, default=None, help="Optional database URL"
+    )
+
     args = parser.parse_args()
 
     if args.subcommand == "ingest":
@@ -177,6 +260,8 @@ def main() -> None:
         handle_extract_memory(args)
     elif args.subcommand == "search-memory":
         handle_search_memory(args)
+    elif args.subcommand == "retrieve":
+        handle_retrieve(args)
     else:
         parser.print_help()
 

@@ -41,7 +41,14 @@ flowchart TD
 - `test_memory_retrieval.py`: Paginated retrieval, team filtering, type/status filtering, statement and quote query filtering, eager relationship loading.
 - `test_memory_api.py`: Extraction trigger validation, run status inspection, search filtering, single memory retrieval by UUID.
 
-### 1.4 Frontend Foundation Tests (Phase 1)
+### 1.4 Hybrid Retrieval Tests (Phase 4)
+- `test_query_processor.py`: AMI team code extraction (`TS3006`), meeting code extraction (`TS3006b`), speaker label/role parsing (`Speaker C`, `Project Manager`), domain keyword extraction, temporal indicator detection (`initially`, `eventually`, `change`), and stopword removal.
+- `test_hybrid_retrieval.py`: Reciprocal Rank Fusion ($k=60$) mathematics, channel weight tuning ($w_{kw}, w_{vec}$), keyword-only execution, vector-only execution, hybrid fusion, metadata filtering (`team_code`, `meeting_codes`, `speaker_labels`), and candidate limit enforcement.
+- `test_temporal_retrieval.py`: Temporal memory retrieval integration, relationship graph traversal (linking historical decisions with superseding decisions), and open disagreement isolation.
+- `test_retrieval_api.py`: Integration testing of `/api/v1/retrieval/search` and `/api/v1/retrieval/process-query` endpoints with FastAPI `TestClient`, validation error handling, and parameter overrides.
+- `test_retrieval_evaluation.py`: Metric computation correctness (`Recall@K`, `Precision@K`, `MRR`), synthetic ranking fixtures, and benchmark suite verification.
+
+### 1.5 Frontend Foundation Tests (Phase 1)
 - Overview page renders product title, mission, and workflow pipeline.
 - System status panel handles loading, healthy, degraded, and network failure states.
 - TanStack Query hook handles polling and error catching.
@@ -64,3 +71,18 @@ flowchart TD
 
 ### 2.3 Failure Analysis Protocol
 - Three documented edge cases and failure modes analyzed with root causes and corrective mitigations.
+
+### 2.4 Retrieval Evaluation Benchmark Results (Phase 4)
+The hybrid retrieval engine was benchmarked against the 25 multi-meeting questions in `data/raw/questions.json` across 10 evaluation runs:
+
+| Metric | Keyword Only | Dense Vector Only | Hybrid RRF ($w=1.0/1.0, k=60$) | Target / Benchmark |
+|---|---|---|---|---|
+| **Recall@5** | 0.4400 | 0.6800 | **0.6800** | $\ge 0.60$ |
+| **Recall@10** | 0.5200 | 0.8200 | **0.8200** | $\ge 0.75$ |
+| **Precision@5** | 0.7000 | 0.8000 | **0.8000** | $\ge 0.70$ |
+| **Precision@10** | 0.8000 | 0.9000 | **0.9000** | $\ge 0.80$ |
+| **MRR** | 0.8000 | 0.9000 | **0.9000** | $\ge 0.85$ |
+| **Multi-Meeting Coverage** | 50.0% | 90.0% | **90.0%** | $\ge 80.0\%$ |
+| **Mean Latency (Warm)** | 5.42 ms | 98.40 ms | **97.00 ms** | $< 250$ ms |
+
+For the complete evaluation report, error analysis, and tuning experiments, see [RETRIEVAL_EVALUATION.md](./evaluation/RETRIEVAL_EVALUATION.md).

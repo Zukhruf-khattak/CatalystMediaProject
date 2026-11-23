@@ -94,3 +94,4 @@ cd backend
 - `test_get_nonexistent_job_returns_404`: Validates standard 404 response structure.
 - `test_list_ingestion_jobs_empty`: Verifies job listing response schema.
 - `test_create_sync_ingestion_job`: Tests synchronous job execution and response status 202.
+

@@ -7,6 +7,14 @@ from app.models.dataset import (
     Team,
     TranscriptTurn,
 )
+from app.models.memory import (
+    Memory,
+    MemoryExtractionRun,
+    MemoryRelationship,
+    MemoryStatus,
+    MemoryType,
+    RelationshipType,
+)
 
 __all__ = [
     "Team",
@@ -16,4 +24,10 @@ __all__ = [
     "IngestionJob",
     "CrossDialectVector",
     "CrossDialectTSVector",
+    "Memory",
+    "MemoryRelationship",
+    "MemoryExtractionRun",
+    "MemoryType",
+    "MemoryStatus",
+    "RelationshipType",
 ]

@@ -1,3 +1,41 @@
-from app.schemas.health import HealthResponse, ReadyResponse
+from app.schemas.dataset import (
+    IngestionJobCreate,
+    IngestionJobListResponse,
+    IngestionJobResponse,
+    IngestionStatsResponse,
+    ParsedMeeting,
+    ParsedSpeaker,
+    ParsedTurn,
+)
+from app.schemas.memory import (
+    MemoryBase,
+    MemoryCreate,
+    MemoryExtractionRequest,
+    MemoryExtractionRunResponse,
+    MemoryRelationshipBase,
+    MemoryRelationshipCreate,
+    MemoryRelationshipResponse,
+    MemoryResponse,
+    MemorySearchFilter,
+    MemorySearchResponse,
+)
 
-__all__ = ["HealthResponse", "ReadyResponse"]
+__all__ = [
+    "ParsedSpeaker",
+    "ParsedTurn",
+    "ParsedMeeting",
+    "IngestionJobCreate",
+    "IngestionJobResponse",
+    "IngestionJobListResponse",
+    "IngestionStatsResponse",
+    "MemoryBase",
+    "MemoryCreate",
+    "MemoryResponse",
+    "MemoryRelationshipBase",
+    "MemoryRelationshipCreate",
+    "MemoryRelationshipResponse",
+    "MemorySearchFilter",
+    "MemorySearchResponse",
+    "MemoryExtractionRequest",
+    "MemoryExtractionRunResponse",
+]

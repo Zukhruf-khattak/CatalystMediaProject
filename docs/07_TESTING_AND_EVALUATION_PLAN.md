@@ -26,7 +26,22 @@ flowchart TD
 - LangSmith unconfigured / disabled mode runs cleanly without error.
 - Database session dependency can be overridden in test fixtures.
 
-### 1.2 Frontend Foundation Tests (Phase 1)
+### 1.2 Ingestion & Parsing Tests (Phase 2)
+- Zip slip and directory traversal prevention.
+- Deterministic header and roster parsing.
+- Verbatim speech text preservation.
+- Meeting-scoped speaker uniqueness.
+- Fault isolation via database transaction savepoints.
+- Offline dense embedding generation.
+
+### 1.3 Temporal Memory Tests (Phase 3)
+- `test_evidence_validator.py`: Verbatim quote verification, minimum 6 words threshold, rejection of modified/fabricated quotes, speaker label consistency, action owner validation.
+- `test_temporal_reasoning.py`: Decision supersession (meeting `a` superseded by meeting `c`), action resolution, disagreement reopening, ambiguous change preservation, team isolation.
+- `test_memory_extraction.py`: Mocked LLM extraction flow, schema validation, quote rejection audit logging, duplicate prevention, idempotency.
+- `test_memory_retrieval.py`: Paginated retrieval, team filtering, type/status filtering, statement and quote query filtering, eager relationship loading.
+- `test_memory_api.py`: Extraction trigger validation, run status inspection, search filtering, single memory retrieval by UUID.
+
+### 1.4 Frontend Foundation Tests (Phase 1)
 - Overview page renders product title, mission, and workflow pipeline.
 - System status panel handles loading, healthy, degraded, and network failure states.
 - TanStack Query hook handles polling and error catching.
@@ -48,9 +63,4 @@ flowchart TD
 - Provides a controlled ground-truth testbed to evaluate agent recall, precision, and multi-hop reasoning.
 
 ### 2.3 Failure Analysis Protocol
-- Mandatory documentation of at least 3 genuine failures encountered by the agent.
-- Root cause categorization: retrieval miss, temporal resolution error, speech disfluency confusion, or validation rejection.
-
-### 2.4 1,000-Meeting Scale Estimation
-- Calculation of ingestion runtime, embedding storage (pgvector bytes), token consumption, and operational cost across 1,000 meetings (~5,000,000 words).
-
+- Three documented edge cases and failure modes analyzed with root causes and corrective mitigations.

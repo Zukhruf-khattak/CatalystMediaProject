@@ -18,10 +18,11 @@
 ## 3. Telemetry and Logging Redaction
 - **No Raw Transcript Leaks to Traces**: External tracing (LangSmith) receives only operational metadata, node latencies, and tool parameter shapes. Raw meeting transcript text is redacted or kept local to prevent unintentional PII exfiltration.
 - **Structured Log Safety**: Application logs output JSON with timestamp, severity, logger name, and request ID. Database credentials and authentication tokens are masked.
+- **Extraction Audit Scrubbing**: Rejection logs in `MemoryExtractionRun.errors_json` contain transcript excerpts and parsing reasons, stored strictly in PostgreSQL without telemetry broadcast.
 
 ---
 
-## 4. Local-Only Execution Mode
+## 4. Local-Only Execution Mode & Zero Paid API Dependency
 - The system is architected to operate 100% offline using local Ollama LLMs and local `sentence-transformers` CPU embeddings.
 - No network call is made to third-party proprietary APIs unless the user explicitly configures an optional Gemini key.
-
+- Testing utilizes deterministic `MockLLMClient` to guarantee fast, zero-network unit test execution.

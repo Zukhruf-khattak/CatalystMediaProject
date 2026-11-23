@@ -190,3 +190,4 @@
    Supports fast approximate nearest neighbor (ANN) cosine similarity search for 384-dimensional vectors.
 3. **Cross-Dialect Test Compatibility:**
    `CrossDialectVector` and `CrossDialectTSVector` custom types automatically map to PostgreSQL native `vector(384)` and `tsvector` in production, while falling back to standard `Text` on SQLite, allowing automated test suites to run completely in-memory in under 1 second.
+

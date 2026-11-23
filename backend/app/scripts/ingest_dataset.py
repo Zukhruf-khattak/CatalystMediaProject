@@ -61,6 +61,7 @@ def main() -> None:
     if db_url:
         from sqlalchemy import create_engine
         from sqlalchemy.orm import sessionmaker
+
         import app.models  # noqa: F401
         from app.db.base import Base
 

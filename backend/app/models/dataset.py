@@ -1,3 +1,4 @@
+import json
 import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
@@ -37,6 +38,27 @@ class CrossDialectVector(TypeDecorator):
         if dialect.name == "postgresql":
             return dialect.type_descriptor(Vector(self.dim))
         return dialect.type_descriptor(Text())
+
+    def process_bind_param(self, value: Any, dialect: Any) -> Any:
+        if value is None:
+            return None
+        if dialect.name == "postgresql":
+            return value
+        if isinstance(value, (list, tuple)):
+            return json.dumps(value)
+        return str(value)
+
+    def process_result_value(self, value: Any, dialect: Any) -> Any:
+        if value is None:
+            return None
+        if dialect.name == "postgresql":
+            return value
+        if isinstance(value, str):
+            try:
+                return json.loads(value)
+            except Exception:
+                return value
+        return value
 
 
 class CrossDialectTSVector(TypeDecorator):

@@ -45,24 +45,43 @@ docker-compose down
 ---
 
 ## 3. Database Migration Operations
-Alembic manages schema evolution:
+Alembic manages schema evolution across all phases:
 ```bash
 cd backend
-
-# Apply migrations
+# Upgrade to latest schema
 alembic upgrade head
 
-# Rollback one migration
-alembic downgrade -1
-
-# Generate new migration autodetect
-alembic revision --autogenerate -m "description"
+# Inspect SQL DDL offline without connecting to PostgreSQL
+alembic upgrade head --sql
 ```
+
+Available Migrations:
+- `001_initial_pgvector`: Enable PostgreSQL `pgvector` extension.
+- `002_dataset_ingestion_schema`: Tables for `teams`, `meetings`, `speakers`, `transcript_turns`, `ingestion_jobs`.
+- `003_temporal_memory_schema`: Tables for `memories`, `memory_relationships`, `memory_extraction_runs`.
 
 ---
 
-## 4. Health Checks and Diagnostics
-- **Liveness**: `curl -s http://localhost:8000/api/v1/health`
-- **Readiness**: `curl -s http://localhost:8000/api/v1/ready`
-- **Container Health**: Handled automatically in `docker-compose.yml` using `pg_isready` with 5s timeout.
+## 4. Operational CLI Commands
 
+### Dataset Ingestion
+```bash
+python -m app.cli ingest --dataset-path data/raw --skip-embeddings
+```
+
+### Temporal Memory Extraction
+```bash
+# Extract memories chronologically for an entire team
+python -m app.cli extract-memory --team-code TS3006
+
+# Extract memories for a single meeting
+python -m app.cli extract-memory --meeting-code TS3006a
+
+# Force re-extraction
+python -m app.cli extract-memory --meeting-code TS3006a --force
+```
+
+### Memory Search
+```bash
+python -m app.cli search-memory --team-code TS3006 --type DECISION --status current
+```

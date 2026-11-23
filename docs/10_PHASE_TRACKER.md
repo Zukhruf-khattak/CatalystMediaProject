@@ -6,8 +6,8 @@
 |---|---|---|---|---|---|
 | **01** | **Repository Foundation, Architecture Baseline & Engineering Setup** | **Completed** | [PHASE_01_FOUNDATION.md](./prompts/PHASE_01_FOUNDATION.md) | Brief, Dataset inspection | Repository layout, FastAPI + React shells, Docker Compose, Alembic pgvector, CI/Tests, Docs |
 | **02** | **Dataset Ingestion and Preprocessing** | **Completed** | [PHASE_02_DATASET_INGESTION.md](./prompts/PHASE_02_DATASET_INGESTION.md) | Phase 1 | 138 transcripts parsed into PostgreSQL speaker-turns, local embeddings, lexical indexes |
-| **03** | **Memory System & Temporal Architecture** | **Ready** | `PHASE_03_MEMORY_SYSTEM.md` | Phase 2 | Short-term + long-term memory schemas, decision lifecycle tracking |
-| **04** | **Hybrid Retrieval & Evidence Packs** | **Planned** | `PHASE_04_HYBRID_RETRIEVAL.md` | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
+| **03** | **Memory System & Temporal Architecture** | **Completed** | [PHASE_03_MEMORY_SYSTEM.md](./prompts/PHASE_03_MEMORY_SYSTEM.md) | Phase 2 | Persistent temporal memory, decision supersession, exact quotation validation, retrieval service |
+| **04** | **Hybrid Retrieval & Evidence Packs** | **Ready** | `PHASE_04_HYBRID_RETRIEVAL.md` | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
 | **05** | **LangGraph Multi-Step Research Agent** | **Planned** | `PHASE_05_LANGGRAPH_AGENT.md` | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
 | **06** | **Deterministic Citation Validation** | **Planned** | `PHASE_06_CITATION_VALIDATION.md` | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
 | **07** | **Team TS3012 Pre-Meeting Briefing** | **Planned** | `PHASE_07_TS3012_BRIEFING.md` | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
@@ -53,3 +53,22 @@
 - [x] Comprehensive documentation deliverables completed.
 - [x] Zero premature Phase 3 features introduced.
 
+---
+
+## Phase 3 Acceptance Gate Checklist
+- [x] Database models created for `Memory`, `MemoryRelationship`, and `MemoryExtractionRun`.
+- [x] Alembic migration `003_temporal_memory_schema` compiles and verifies cleanly.
+- [x] Exact verbatim quotation validator implemented (`EvidenceValidator`, >=6 words rule, turn-scoped substring).
+- [x] Rejection of modified or fabricated quotes strictly enforced and logged in `run.errors_json`.
+- [x] Temporal reasoning engine implemented (`TemporalReasoningService`) with decision supersession, action resolution, disagreement reopening.
+- [x] Historical immutability preserved (older memories marked `superseded`, never deleted or overwritten).
+- [x] Ambiguous changes preserved as `is_ambiguous=True` without mutating lifecycle status.
+- [x] Free / local LLM provider abstraction implemented (`OllamaLLMClient`, `MockLLMClient`).
+- [x] Memory extraction service implemented (`MemoryExtractionService`) with sliding window, deduplication, and transactional savepoints.
+- [x] Paginated memory retrieval service implemented (`MemoryRetrievalService`) with multi-dimensional filtering and eager relationship loading.
+- [x] REST endpoints `/api/v1/memory/*` implemented and tested.
+- [x] CLI commands `catalist extract-memory` and `catalist search-memory` implemented.
+- [x] 100% automated test suite passing (71 backend tests, 8 frontend tests = 79 total).
+- [x] Ruff linter and formatter passing with zero errors across all backend code.
+- [x] Architecture, database, operations, and tracker documentation updated.
+- [x] Zero Phase 4/5 code (LangGraph agent, TS3012 briefing) prematurely created.

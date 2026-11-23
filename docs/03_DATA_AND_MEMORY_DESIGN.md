@@ -11,67 +11,111 @@
    - `start_time`: e.g. `00:04:12`
    - `turn_index`: Sequential integer index within the transcript
    - `text`: Verbatim transcript string
-3. **Temporal Awareness**: Decisions change over time. Meeting *b* may revise a concept from *a*; meeting *c* may cut a feature due to budget; meeting *d* may finalize it. The memory model must track chronological sequence.
+3. **Temporal Awareness & Historical Immutability**: Decisions change over time. Meeting *b* may revise a concept from *a*; meeting *c* may cut a feature due to budget; meeting *d* may finalize it. The memory model preserves every historical state, tracking chronological evolution via directed relationship edges. Older memories are never overwritten or deleted.
+4. **Deterministic Evidence Citations**: Every atomic memory cites an exact verbatim quotation of at least 6 consecutive words from a specific supporting transcript turn. Fabricated, hallucinated, or modified quotations are strictly rejected.
 
 ---
 
-## 2. Planned Data Schema (Phase 2 & Phase 3)
+## 2. Implemented Data Schema (Phase 2 & Phase 3)
 
 ```mermaid
 erDiagram
-    MEETING {
-        string meeting_id PK
-        string team_id FK
-        int sequence_number
-        string sequence_letter
-        int total_turns
-        int word_count
-        timestamp created_at
-    }
-    SPEAKER_TURN {
+    TEAMS ||--o{ MEETINGS : "contains"
+    MEETINGS ||--o{ SPEAKERS : "participates in"
+    MEETINGS ||--o{ TRANSCRIPT_TURNS : "consists of"
+    SPEAKERS ||--o{ TRANSCRIPT_TURNS : "speaks"
+
+    TEAMS ||--o{ MEMORIES : "owns"
+    MEETINGS ||--o{ MEMORIES : "recorded in"
+    TRANSCRIPT_TURNS ||--o{ MEMORIES : "evidences"
+
+    MEMORIES ||--o{ MEMORY_RELATIONSHIPS : "source (newer)"
+    MEMORIES ||--o{ MEMORY_RELATIONSHIPS : "target (older)"
+
+    TEAMS ||--o{ MEMORY_EXTRACTION_RUNS : "audited in"
+    MEETINGS ||--o{ MEMORY_EXTRACTION_RUNS : "tracked in"
+
+    MEMORIES {
         uuid id PK
-        string meeting_id FK
-        int turn_index
+        uuid team_id FK
+        uuid meeting_id FK
+        uuid turn_id FK
+        string memory_type
+        text statement
+        text quote
         string speaker_label
         string speaker_role
-        string start_time
-        text raw_text
-        tsvector search_vector
-        vector embedding_384
-    }
-    MEMORY_DECISION {
-        uuid id PK
-        string team_id
-        string meeting_id FK
-        string topic
-        text description
+        smallint meeting_order
+        string sequence_letter
         string status
-        uuid supersedes_decision_id FK
-    }
-    ACTION_ITEM {
-        uuid id PK
-        string team_id
-        string meeting_id FK
-        string owner_speaker
-        text description
-        string status
+        float confidence
+        string extraction_version
+        vector embedding
+        json metadata_json
+        timestamp created_at
+        timestamp updated_at
     }
 
-    MEETING ||--o{ SPEAKER_TURN : "contains"
-    MEETING ||--o{ MEMORY_DECISION : "records"
-    MEETING ||--o{ ACTION_ITEM : "assigns"
+    MEMORY_RELATIONSHIPS {
+        uuid id PK
+        uuid source_memory_id FK
+        uuid target_memory_id FK
+        string relationship_type
+        text rationale
+        boolean is_ambiguous
+        float confidence
+        timestamp created_at
+    }
+
+    MEMORY_EXTRACTION_RUNS {
+        uuid id PK
+        uuid team_id FK
+        uuid meeting_id FK
+        string status
+        timestamp started_at
+        timestamp completed_at
+        int total_turns_analyzed
+        int total_memories_extracted
+        int total_memories_validated
+        int total_memories_rejected
+        int total_relationships_created
+        json errors_json
+        json summary_json
+    }
 ```
 
 ---
 
-## 3. Short-Term vs. Long-Term Memory Design
-- **Short-Term Memory (Working Context)**: Held in the LangGraph agent state during a single query execution. Carries current hypotheses, extracted evidence candidates, and search history across iterations.
-- **Long-Term Memory (Persistent Graph / Relational)**: Stored in PostgreSQL. Extracts semantic entities, decision lifecycles, and open action items linked back to exact speaker turn IDs.
+## 3. Atomic Memory Types
+
+- `DECISION`: Concrete design, architectural, technical, marketing, or project decisions, including revisions to prior decisions.
+- `ACTION`: Explicit task commitments, action assignments, next steps, and their assigned owners.
+- `PREFERENCE`: Customer, user, or stakeholder preferences and aesthetic choices.
+- `REQUIREMENT`: Functional, mechanical, electrical, financial, or user requirements.
+- `DISAGREEMENT`: Active disputes, conflicting viewpoints, arguments, or unresolved issues.
+- `ENTITY`: Core product components, physical materials, or target market segments.
 
 ---
 
-## 4. Phase 1 Implementation Status
-- **Implemented Now**: Alembic baseline configuration with pgvector extension activation.
-- **Deferred to Phase 2**: `meetings` and `speaker_turns` relational tables, tsvector generation, embedding columns, and ingestion pipeline.
-- **Deferred to Phase 3**: Structured temporal decision and action item memory models.
+## 4. Directed Temporal Relationships
 
+Directed edges connect a newer memory (`source_memory_id`) back to an earlier memory (`target_memory_id`):
+- `supersedes`: A newer decision replaces an earlier decision on the same topic. The prior decision is transitioned to `status="superseded"` while the newer remains `status="current"`.
+- `updates`: A newer statement refines, narrows, or expands upon prior knowledge without complete replacement.
+- `resolves`: An action item is completed or a prior disagreement is resolved by team consensus.
+- `reopens`: A previously settled topic or closed disagreement is re-examined in a later meeting.
+- `supports`: Later findings or discussions reaffirm an earlier decision.
+- `contradicts`: An opposing statement conflicts with an earlier assertion without formal supersession.
+
+### Ambiguity Preservation
+When evidence is tentative or inconclusive, the relationship is created with `is_ambiguous=True`. In this state, lifecycle statuses are left unaltered to avoid premature supersession.
+
+---
+
+## 5. Exact Citation Validation Protocol
+
+The `EvidenceValidator` enforces:
+1. **Length Gate**: The quotation must contain at least 6 words.
+2. **Verbatim Substring**: The normalized quotation must appear verbatim in `TranscriptTurn.raw_text`.
+3. **Speaker Consistency**: The stated speaker label must match the speaker associated with the referenced turn.
+4. **Action Ownership Guard**: If an action specifies an owner, the owner must be explicitly named or addressed in the utterance.

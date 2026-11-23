@@ -34,3 +34,4 @@ Every candidate citation must pass four deterministic checks:
 ## 4. Phase Boundaries
 - **Implemented in Phase 1**: Citation policy, contract definitions, and ADR-005.
 - **Deferred to Phase 6**: Production citation validation engine and test suite.
+

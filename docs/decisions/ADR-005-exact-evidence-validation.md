@@ -28,3 +28,4 @@ We enforce a **Strict Model vs. Code Separation** for citations:
 ## Consequences
 - **Positive**: 100% adherence to assessment scoring rules, deterministic guarantees, zero hallucinated citations accepted into `answers.json`.
 - **Phase 1 Scope**: Architectural boundary and policy established; validation service implementation scheduled for Phase 6.
+

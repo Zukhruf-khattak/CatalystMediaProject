@@ -47,3 +47,4 @@ stateDiagram-v2
 - **Implemented Now (Phase 1)**: LangSmith tracing configuration hooks, safe fallback when tracing is disabled.
 - **Deferred to Phase 4**: Hybrid retrieval service and RRF ranking algorithms.
 - **Deferred to Phase 5**: LangGraph state machine, search tools, and agent loops.
+

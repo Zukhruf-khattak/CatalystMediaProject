@@ -53,3 +53,4 @@ flowchart TD
 
 ### 2.4 1,000-Meeting Scale Estimation
 - Calculation of ingestion runtime, embedding storage (pgvector bytes), token consumption, and operational cost across 1,000 meetings (~5,000,000 words).
+

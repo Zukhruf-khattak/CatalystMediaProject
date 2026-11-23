@@ -22,3 +22,4 @@ export interface PhaseInfo {
   status: "ready" | "in_progress" | "completed" | "planned";
   description: string;
 }
+

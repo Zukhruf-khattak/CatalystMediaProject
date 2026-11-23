@@ -26,3 +26,4 @@ We enforce a **Local-First, Pluggable Model Strategy**:
 ## Consequences
 - **Positive**: Anyone can clone, inspect, test, and run the project without paying for API tokens or owning specialized hardware.
 - **Negative**: Smaller local models requires structured output constraints and deterministic fallback validators to prevent hallucinated quotes.
+

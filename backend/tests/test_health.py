@@ -25,3 +25,4 @@ def test_health_endpoint(client: TestClient) -> None:
     assert "password" not in raw_text
     assert "postgres" not in raw_text
     assert "secret" not in raw_text
+

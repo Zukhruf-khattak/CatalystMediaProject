@@ -74,3 +74,4 @@ erDiagram
 - **Implemented Now**: Alembic baseline configuration with pgvector extension activation.
 - **Deferred to Phase 2**: `meetings` and `speaker_turns` relational tables, tsvector generation, embedding columns, and ingestion pipeline.
 - **Deferred to Phase 3**: Structured temporal decision and action item memory models.
+

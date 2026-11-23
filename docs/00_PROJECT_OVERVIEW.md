@@ -68,3 +68,4 @@ As specified in the Catalist build-test brief:
 - Live audio processing / speech-to-text (the project ingests text transcripts).
 - Proprietary closed-source vector database SaaS (Chroma/Pinecone cloud).
 - GPU/CUDA acceleration requirement for base developer workstation.
+

@@ -26,3 +26,4 @@ data/
 
 - **Phase 1 (Current)**: Directory structure established, dataset integrity and structure inspected. **No transcript parsing or ingestion is performed.**
 - **Phase 2 (Next)**: Resumable, idempotent ingestion into PostgreSQL 16 + pgvector with exact speaker turns preserved.
+

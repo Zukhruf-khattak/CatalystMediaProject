@@ -17,3 +17,4 @@
 
 ### 3. Running Without Docker
 - If Docker daemon is unavailable, developer can use a local PostgreSQL installation or run tests using Pytest with SQLite test database fixture overrides.
+

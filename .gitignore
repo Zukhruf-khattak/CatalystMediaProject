@@ -62,3 +62,4 @@ Thumbs.db
 data/raw/*.zip
 data/processed/*
 !data/processed/.gitkeep
+

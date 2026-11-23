@@ -33,3 +33,4 @@
 - [x] Complete documentation suite under `docs/` and ADRs under `docs/decisions/`.
 - [x] Zero paid API keys required.
 - [x] No premature implementation of Phase 2 ingestion or agent logic.
+

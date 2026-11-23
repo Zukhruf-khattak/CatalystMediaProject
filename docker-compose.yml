@@ -63,3 +63,4 @@ services:
 volumes:
   postgres_data:
     name: catalist_postgres_data
+

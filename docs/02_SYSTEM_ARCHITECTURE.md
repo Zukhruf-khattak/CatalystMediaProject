@@ -86,3 +86,4 @@ When scaling from 138 meetings (~676,000 words) to 10,000 meetings (~50,000,000 
    - GIN indexes on `tsvector` column for sub-second keyword matching across 2.5 million turns.
    - HNSW index on pgvector embeddings for sub-50ms vector cosine distance lookups.
 3. **Query Bounding**: Agent queries never retrieve unbound datasets. Multi-hop searches retrieve narrow top-k candidates per step (e.g. top-15 turns per meeting sequence), preventing LLM context bloat.
+

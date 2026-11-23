@@ -21,3 +21,4 @@ DROP EXTENSION IF EXISTS vector;
 cd backend
 alembic upgrade head
 ```
+

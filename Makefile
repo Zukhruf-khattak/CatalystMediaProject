@@ -55,3 +55,4 @@ migrate:
 
 migrate-down:
 	cd backend && alembic downgrade -1
+

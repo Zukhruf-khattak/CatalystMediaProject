@@ -24,3 +24,4 @@
 ## 4. Local-Only Execution Mode
 - The system is architected to operate 100% offline using local Ollama LLMs and local `sentence-transformers` CPU embeddings.
 - No network call is made to third-party proprietary APIs unless the user explicitly configures an optional Gemini key.
+

@@ -29,3 +29,4 @@ The backend is structured into distinct, cohesive layers:
 - **Positive**: Single codebase, straightforward local execution, atomic database transactions, zero network latency between ingestion and reasoning modules, fast testing and debugging.
 - **Negative**: Requires strict discipline to keep boundaries clean; routes must not bypass service layers to access raw database sessions.
 - **Phase 1 Scope**: Implemented foundation layers (`core`, `db`, `schemas`, `services`, `api/v1`), health and readiness endpoints. Domain modules for ingestion, memory, and agents remain interfaces for later phases.
+

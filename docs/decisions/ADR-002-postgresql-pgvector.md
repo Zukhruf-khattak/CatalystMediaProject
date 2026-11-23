@@ -31,3 +31,4 @@ Key design points:
 - **Positive**: Single persistence engine, ACID transactions, atomic migrations via Alembic, zero cloud cost, local Docker container, scales easily to millions of turns.
 - **Negative**: Requires pgvector extension installation (handled seamlessly by Docker `pgvector/pgvector:pg16` image).
 - **Phase 1 Scope**: pgvector extension migration defined and ready in Alembic; health/readiness checks verify database connectivity. Domain tables are deferred to Phase 2.
+

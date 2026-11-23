@@ -27,3 +27,4 @@ A formal rule of precedence is required whenever potential ambiguities or confli
 ## Consequences
 - Transparent alignment with evaluator expectations.
 - Zero ambiguity during implementation.
+

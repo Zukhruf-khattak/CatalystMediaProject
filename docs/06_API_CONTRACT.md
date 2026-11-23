@@ -73,3 +73,4 @@ The Catalist Meeting Intelligence API is served over HTTP/JSON under the prefix 
 | `/api/v1/citations/validate`| POST | Phase 6 | Deterministically validate quote against database |
 | `/api/v1/brief/{team_id}` | GET/POST | Phase 7 | Generate pre-meeting brief for specified team |
 | `/api/v1/evaluations` | GET | Phase 9 | View evaluation benchmark results |
+

@@ -38,3 +38,4 @@ This document establishes the functional and non-functional requirements for the
 - **NFR-06 (No Mandatory Paid Keys)**: The entire foundation, ingestion, testing, and evaluation pipeline must be executable using local-first tools (Ollama/CPU embeddings) or optional free-tier keys.
 - **NFR-07 (Secret Safety)**: Credentials, API tokens, and connection strings must be read strictly from environment variables and excluded from version control.
 - **NFR-08 (Resource Footprint)**: Foundation services must run on consumer machines with <= 16GB RAM and no discrete GPU.
+

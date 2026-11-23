@@ -65,3 +65,4 @@ alembic revision --autogenerate -m "description"
 - **Liveness**: `curl -s http://localhost:8000/api/v1/health`
 - **Readiness**: `curl -s http://localhost:8000/api/v1/ready`
 - **Container Health**: Handled automatically in `docker-compose.yml` using `pg_isready` with 5s timeout.
+

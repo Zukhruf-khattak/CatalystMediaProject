@@ -122,3 +122,4 @@ The frontend is engineered to explore 138 AMI meeting transcripts, inspect verif
 - **Vitest & React Testing Library:** 10 test suites covering all 8 routes and shared modal inspectors.
 - **Strict TypeScript Validation:** Zero TypeScript compiler warnings or errors (`tsc --noEmit`).
 - **Deterministic Mocking:** All backend API contracts mocked using strongly-typed Pydantic-equivalent TypeScript interfaces.
+

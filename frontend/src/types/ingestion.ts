@@ -34,3 +34,4 @@ export interface IngestionJobCreate {
   skip_embeddings?: boolean;
   limit_files?: number | null;
 }
+

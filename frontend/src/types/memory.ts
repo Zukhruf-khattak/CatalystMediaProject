@@ -49,3 +49,4 @@ export interface MemorySearchResponse {
   limit: number;
   offset: number;
 }
+

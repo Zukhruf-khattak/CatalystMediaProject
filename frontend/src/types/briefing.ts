@@ -103,3 +103,4 @@ export interface BriefingListResponse {
   briefings: BriefingResponse[];
   total: number;
 }
+

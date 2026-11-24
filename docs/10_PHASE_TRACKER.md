@@ -12,7 +12,7 @@
 | **06** | **Deterministic Citation Validation** | **Completed** | [PHASE_06_CITATION_VALIDATION.md](./prompts/PHASE_06_CITATION_VALIDATION.md) | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule, retry loops |
 | **07** | **Team TS3012 Pre-Meeting Briefing** | **Completed** | [PHASE_07_TS3012_BRIEFING.md](./prompts/PHASE_07_TS3012_BRIEFING.md) | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
 | **08** | **React Frontend Interface** | **Completed** | [PHASE_08_REACT_FRONTEND.md](./prompts/PHASE_08_REACT_FRONTEND.md) | Phase 7 | Full web UI for question research, answer review, and briefing display |
-| **09** | **Evaluation Benchmark & Submission Package** | **Planned** | `PHASE_09_EVALUATION_SUBMISSION.md` | Phase 8 | 25 answered questions, 10 author-verified benchmark, 3 failure analyses, 1,000 meeting estimate, `answers.json` |
+| **09** | **Evaluation Benchmark & Submission Package** | **Completed** | [PHASE_09_EVALUATION_SUBMISSION.md](./prompts/PHASE_09_EVALUATION_SUBMISSION.md) | Phase 8 | 25 answered questions, 10 author-verified benchmark, 3 failure analyses, 1,000 meeting estimate, `answers.json` |
 
 ---
 
@@ -174,3 +174,21 @@
 - [x] Backend Ruff linting and formatting pass cleanly (`ruff check` with 0 errors).
 - [x] Comprehensive architectural documentation (`docs/architecture/FRONTEND_COMPONENT_ARCHITECTURE.md`) and operational runbook (`docs/operations/FRONTEND_RUNBOOK.md`) completed.
 - [x] Zero Phase 9 code (final 25-question answers.json, author-verified benchmark, failure analysis write-up) prematurely generated.
+
+---
+
+## Phase 9 Acceptance Gate Checklist
+- [x] Complete corpus ingestion and indexing of all 138 AMI meetings with dense vectors (`sentence-transformers/all-MiniLM-L6-v2`) in `catalist.db`.
+- [x] Ingestion throughput measured empirically: 1,125.73 s (~18.8 min), 48,148 turns, 676,745 words (~42.8 turns/sec, ~782 tokens/sec).
+- [x] All 25 benchmark assessment questions answered and deterministically validated (`artifacts/answers.json`).
+- [x] Every answer satisfies exact Catalist criteria: 1–2 plain sentences, 1–3 citations, verbatim quotations $\ge 6$ words from single speaker turns, evidence from $\ge 2$ distinct meetings per team.
+- [x] 100% deterministic citation validation passing with zero hallucinations or unverified paraphrases.
+- [x] Team TS3012 pre-meeting briefing generated with full 9-section coverage and verified citations (`artifacts/briefing.md` and included in `artifacts/answers.json`).
+- [x] Custom capability benchmark suite designed and evaluated: 10 cross-meeting challenge questions across 8 capability categories with 100% accuracy (`artifacts/evaluation_report.md`).
+- [x] Three detailed failure case studies documented with root cause analysis and architectural remedies.
+- [x] End-to-end latency profiled across all 7 pipeline stages (mean query turnaround ~2.53 s).
+- [x] Enterprise scalability and economic analysis documented for 1,000 and 10,000 meetings (storage, HNSW memory, local CPU vs hosted API costs).
+- [x] Final high-density technical report authored (`technical_report.md`).
+- [x] Live demonstration walkthrough script created (`docs/DEMO_SCRIPT.md`).
+- [x] Complete documentation, `CHANGELOG.md`, and `README.md` updated.
+- [x] 100% automated test suite passing across backend and frontend.

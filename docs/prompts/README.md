@@ -23,7 +23,7 @@ This directory stores the complete, copy-paste-ready Antigravity implementation 
 | 06 | [PHASE_06_CITATION_VALIDATION.md](./PHASE_06_CITATION_VALIDATION.md) | Completed | Deterministic exact-quote and citation validation |
 | 07 | [PHASE_07_TS3012_BRIEFING.md](./PHASE_07_TS3012_BRIEFING.md) | Completed | Team TS3012 pre-meeting briefing generation |
 | 08 | [PHASE_08_REACT_FRONTEND.md](./PHASE_08_REACT_FRONTEND.md) | Completed | Full research, answer review, and briefing UI |
-| 09 | `PHASE_09_EVALUATION_SUBMISSION.md` | Planned | Evaluation, failure analysis, scale estimate, `answers.json`, and submission package |
+| 09 | [PHASE_09_EVALUATION_SUBMISSION.md](./PHASE_09_EVALUATION_SUBMISSION.md) | Completed | Evaluation, failure analysis, scale estimate, `answers.json`, and submission package |
 
 ## Documentation outside this folder
 

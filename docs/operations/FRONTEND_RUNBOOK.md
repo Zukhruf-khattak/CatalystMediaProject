@@ -119,3 +119,4 @@ server {
 ### Problem: CORS Errors on API Calls
 - **Root Cause:** Frontend host (e.g. `http://localhost:5173`) not listed in backend `CORS_ORIGINS`.
 - **Remedy:** Add origin to `CORS_ORIGINS` in `.env` or use relative root proxy routing.
+

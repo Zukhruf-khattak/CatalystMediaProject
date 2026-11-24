@@ -80,3 +80,4 @@ describe("CitationContextModal", () => {
     expect(onClose).toHaveBeenCalled();
   });
 });
+

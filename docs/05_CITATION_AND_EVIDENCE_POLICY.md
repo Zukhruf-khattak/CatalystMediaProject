@@ -31,7 +31,7 @@ Every candidate citation must pass four deterministic checks:
 
 ---
 
-## 4. Phase Boundaries
+## 4. Implementation Status (Phase 6 Completed)
 - **Implemented in Phase 1**: Citation policy, contract definitions, and ADR-005.
-- **Deferred to Phase 6**: Production citation validation engine and test suite.
+- **Implemented in Phase 6**: Production deterministic citation validation engine (`CitationValidationService`), LangGraph citation validation node with feedback retry loops, Pydantic validation schemas (`CitationValidationItem`, `AnswerValidationResult`), and comprehensive 13-scenario test suite (`test_citation_validation.py`). Full architecture details are documented in [CITATION_VALIDATION_PIPELINE.md](./architecture/CITATION_VALIDATION_PIPELINE.md).
 

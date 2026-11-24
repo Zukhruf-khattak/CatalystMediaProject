@@ -183,6 +183,9 @@ class AgentService:
             session_id=session_id,
             iteration_count=iteration_count,
             team_code=request.team_code or result_state.get("team_code"),
+            validation_status=result_state.get("validation_status") or "PASSED",
+            validation_errors=result_state.get("validation_errors") or [],
+            supporting_meetings=result_state.get("supporting_meetings") or [],
         )
 
     def query_session(self, session_id: str, request: AgentQueryRequest) -> AgentQueryResponse:

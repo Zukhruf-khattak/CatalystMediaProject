@@ -82,6 +82,7 @@ class AgentTools:
                     "meeting_order": m.meeting_order,
                     "speaker_label": m.speaker_label,
                     "speaker_role": m.speaker_role,
+                    "turn_id": str(m.turn_id) if m.turn_id else None,
                     "score": m.confidence,
                     "channel": "temporal_memory",
                     "linked_memory_ids": [
@@ -129,6 +130,7 @@ class AgentTools:
                 "meeting_order": m.meeting_order,
                 "speaker_label": m.speaker_label,
                 "speaker_role": m.speaker_role,
+                "turn_id": str(m.turn_id) if m.turn_id else None,
             }
             for m in memories
         ]

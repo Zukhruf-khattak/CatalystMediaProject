@@ -59,9 +59,25 @@ stateDiagram-v2
 
 ---
 
-## 5. Phase Boundaries
+## 5. Deterministic Citation Validation Layer (Implemented in Phase 6)
+
+The `CitationValidationService` deterministically verifies that:
+1. Every cited quote is a verbatim substring of a single speaker turn in the specified meeting.
+2. Every quote contains at least 6 whitespace-delimited words.
+3. Quotations are not stitched across multiple turns.
+4. The answer text contains 1 to 3 plain sentences and 1 to 3 citations.
+5. Evidence spans at least 2 distinct meetings of the named team.
+6. Speaker labels and functional roles match verified metadata.
+7. Substantive claims in the answer are lexically substantiated by the quotes.
+If validation fails, the LangGraph agent executes a bounded retry loop (up to 2 retries) with actionable feedback. Full architecture is documented in [CITATION_VALIDATION_PIPELINE.md](./architecture/CITATION_VALIDATION_PIPELINE.md).
+
+---
+
+## 6. Phase Boundaries
 - **Implemented in Phase 1**: Observability hooks, LangSmith tracing configuration.
 - **Implemented in Phase 2**: Transcript dataset storage, PostgreSQL tsvector, and local embeddings.
 - **Implemented in Phase 3**: Temporal memory schema, exact evidence validator, decision supersession engine, memory extraction service, paginated memory retrieval service, and CLI/REST endpoints.
 - **Implemented in Phase 4**: Hybrid retrieval pipeline (`HybridRetrievalService`), Query Processor (`QueryProcessor`), RRF rank fusion (`reciprocal_rank_fusion`), REST endpoints (`/api/v1/retrieval/*`), CLI subcommand (`catalist retrieve`), and comparative evaluation harness (`retrieval_eval.py`).
-- **Deferred to Phase 5**: LangGraph state machine, search tools, and agent loops.
+- **Implemented in Phase 5**: LangGraph state machine, tool use, loop guards, session checkpointing, and REST/CLI query interfaces.
+- **Implemented in Phase 6**: Deterministic citation validation layer (`CitationValidationService`), response validation node, feedback retry state machine, and comprehensive 13-failure-mode test suite.
+- **Deferred to Phase 7**: Team TS3012 pre-meeting briefing generator.

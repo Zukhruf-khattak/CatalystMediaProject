@@ -21,6 +21,36 @@ class AgentCitationItem(BaseModel):
     )
 
 
+class CitationValidationItem(BaseModel):
+    """Deterministic verification result for an individual citation."""
+
+    is_valid: bool = Field(..., description="Whether the citation passed all individual checks")
+    meeting_id: str = Field(..., description="AMI meeting identifier verified")
+    quote: str = Field(..., description="Quotation text verified")
+    word_count: int = Field(..., description="Word count in quote (must be >= 6)")
+    speaker_label: Optional[str] = Field(None, description="Speaker label verified")
+    turn_id: Optional[str] = Field(None, description="Source turn ID verified")
+    errors: List[str] = Field(default_factory=list, description="Specific check failure messages")
+
+
+class AnswerValidationResult(BaseModel):
+    """Complete answer-level and citation validation result."""
+
+    is_valid: bool = Field(..., description="Whether the answer and citations satisfy all rules")
+    sentence_count: int = Field(..., description="Number of sentences in answer")
+    citation_count: int = Field(..., description="Number of citations attached")
+    distinct_meetings: List[str] = Field(
+        default_factory=list, description="Distinct meeting codes cited"
+    )
+    supporting_meetings: List[str] = Field(
+        default_factory=list, description="Meetings passing all validation"
+    )
+    citations: List[CitationValidationItem] = Field(
+        default_factory=list, description="Per-citation validation results"
+    )
+    errors: List[str] = Field(default_factory=list, description="All validation error descriptions")
+
+
 class AgentQueryRequest(BaseModel):
     """Inbound question payload submitted to the LangGraph agent."""
 
@@ -75,6 +105,18 @@ class AgentQueryResponse(BaseModel):
     session_id: str = Field(..., description="Session identifier for thread resumption")
     iteration_count: int = Field(1, description="Number of retrieval loops performed")
     team_code: Optional[str] = Field(None, description="Associated team code")
+    validation_status: str = Field(
+        "PASSED",
+        description="Deterministic citation and evidence validation outcome: PASSED, FAILED, or SKIPPED",
+    )
+    validation_errors: List[str] = Field(
+        default_factory=list,
+        description="Deterministic validation error descriptions if any check failed",
+    )
+    supporting_meetings: List[str] = Field(
+        default_factory=list,
+        description="Unique meeting codes that contributed verified citations",
+    )
     created_at: datetime = Field(
         default_factory=lambda: datetime.now(timezone.utc),
         description="Timestamp of response creation",

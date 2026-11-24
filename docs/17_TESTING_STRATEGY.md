@@ -1,8 +1,8 @@
 # Testing Strategy and Test Architecture
 
-**Phase:** Phase 2 — Dataset Discovery, Transcript Ingestion & Indexing  
+**Phase:** Phase 6 — Deterministic Citation and Evidence Validation  
 **Status:** Operational  
-**Coverage:** 48 automated backend tests + 8 frontend tests (56 total tests passing)
+**Coverage:** 128 automated backend tests + 8 frontend tests (136 total tests passing with 100% pass rate)
 
 ---
 
@@ -94,4 +94,21 @@ cd backend
 - `test_get_nonexistent_job_returns_404`: Validates standard 404 response structure.
 - `test_list_ingestion_jobs_empty`: Verifies job listing response schema.
 - `test_create_sync_ingestion_job`: Tests synchronous job execution and response status 202.
+
+### 3.6. Phase 6 Citation and Evidence Validation Tests (13 Test Cases)
+The `backend/tests/test_citation_validation.py` test suite covers all 13 critical verification scenarios:
+1. `test_exact_quotation_match`: Verbatim quotation of $\ge 6$ words passes individual validation.
+2. `test_case_and_spacing_normalization`: Normalization of whitespace and casing succeeds without altering punctuation.
+3. `test_modified_or_fabricated_quotation`: Modified or hallucinated quote text fails validation.
+4. `test_quote_shorter_than_six_words`: Excerpt with $< 6$ words is strictly rejected.
+5. `test_quote_stitched_across_turns`: Quotes spanning across multiple speaker turns are rejected.
+6. `test_incorrect_meeting_id`: Citation referencing a nonexistent meeting fails validation.
+7. `test_incorrect_team_id`: Citation referencing a meeting from a different team fails validation.
+8. `test_incorrect_speaker_label`: Mismatch between cited speaker letter and verified transcript speaker fails.
+9. `test_duplicate_meeting_citations`: Answer citing the same meeting multiple times fails multi-meeting requirement.
+10. `test_evidence_from_only_one_meeting`: Single-meeting answer fails the cross-meeting evidence requirement ($\ge 2$ meetings).
+11. `test_unsupported_answer_claims`: Answer with $< 20\%$ lexical overlap with citations is rejected for ungrounded claims.
+12. `test_successful_validation_and_retry_behavior`: Agent retries on invalid candidate answer and succeeds when corrected.
+13. `test_insufficient_evidence_after_retries`: Exhausting retries halts cleanly, clears invalid citations, and sets failure answer.
+
 

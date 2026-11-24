@@ -40,7 +40,12 @@ class AgentState(TypedDict, total=False):
     # Stage 5 & 6: Answer Generation & Validation
     answer: Optional[str]
     citations: List[Dict[str, Any]]
+    validation_status: Optional[str]
     validation_errors: List[str]
+    validation_retries: int
+    max_validation_retries: int
+    validation_feedback: Optional[str]
+    supporting_meetings: List[str]
 
     # Observability & Traceability
     steps_taken: List[str]

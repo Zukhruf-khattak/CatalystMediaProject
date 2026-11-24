@@ -4,6 +4,8 @@ from app.schemas.agent import (
     AgentQueryResponse,
     AgentSessionDetailResponse,
     AgentStatusResponse,
+    AnswerValidationResult,
+    CitationValidationItem,
 )
 from app.schemas.dataset import (
     IngestionJobCreate,
@@ -42,6 +44,8 @@ __all__ = [
     "AgentQueryResponse",
     "AgentSessionDetailResponse",
     "AgentStatusResponse",
+    "AnswerValidationResult",
+    "CitationValidationItem",
     "ParsedSpeaker",
     "ParsedTurn",
     "ParsedMeeting",

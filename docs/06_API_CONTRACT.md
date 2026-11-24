@@ -162,17 +162,79 @@ The Catalist Meeting Intelligence API is served over HTTP/JSON under the prefix 
 
 ---
 
-## 4. Planned Endpoints (Future Phases)
+## 4. Agent Research & Citation Validation Endpoints (Phase 5 & 6)
 
-| Endpoint | Method | Phase | Purpose |
-|---|---|---|---|
-| `/api/v1/ingest` | POST | Phase 2 | Trigger or resume transcript ingestion pipeline |
-| `/api/v1/ingest/status` | GET | Phase 2 | Ingestion progress and statistics |
-| `/api/v1/meetings` | GET | Phase 2 | List ingested meetings with pagination |
-| `/api/v1/retrieval/search` | POST | Phase 4 | Hybrid lexical + semantic search endpoint (Implemented) |
-| `/api/v1/retrieval/process-query` | POST | Phase 4 | Deterministic query parsing endpoint (Implemented) |
-| `/api/v1/research/query` | POST | Phase 5 | Execute LangGraph research agent on a question |
-| `/api/v1/citations/validate`| POST | Phase 6 | Deterministically validate quote against database |
-| `/api/v1/brief/{team_id}` | GET/POST | Phase 7 | Generate pre-meeting brief for specified team |
-| `/api/v1/evaluations` | GET | Phase 9 | View evaluation benchmark results |
+### 4.1 POST `/api/v1/agent/query`
+**Purpose**: Run the LangGraph stateful agent to research a user question with deterministic citation and evidence validation.
+
+**Request Body (`AgentQueryRequest`)**:
+```json
+{
+  "question": "What casing material did Team ES2003 switch from and to?",
+  "team_code": "ES2003",
+  "session_id": "optional-uuid"
+}
+```
+
+**Response (200 OK — `AgentQueryResponse`)**:
+```json
+{
+  "session_id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "question": "What casing material did Team ES2003 switch from and to?",
+  "team_code": "ES2003",
+  "answer": "Team ES2003 initially leaned towards a double curved rubber case in ES2003b. In ES2003d, they switched to standard plastic because rubber moulding exceeded the cost budget.",
+  "is_sufficient": true,
+  "citations": [
+    {
+      "meeting_id": "ES2003b",
+      "team_id": "ES2003",
+      "turn_id": "turn-uuid-1",
+      "speaker_label": "Speaker B",
+      "speaker_role": "Industrial Designer",
+      "quote": "leaned towards a double curved rubber case"
+    },
+    {
+      "meeting_id": "ES2003d",
+      "team_id": "ES2003",
+      "turn_id": "turn-uuid-2",
+      "speaker_label": "Speaker B",
+      "speaker_role": "Industrial Designer",
+      "quote": "switched to standard plastic because rubber moulding exceeded the cost budget"
+    }
+  ],
+  "validation_status": "PASSED",
+  "validation_errors": [],
+  "supporting_meetings": ["ES2003b", "ES2003d"],
+  "iteration": 1,
+  "steps_taken": [
+    "input_validation",
+    "query_analysis",
+    "retrieval_planning",
+    "tool_execution",
+    "evidence_assessment",
+    "answer_generation",
+    "citation_validation",
+    "final_response"
+  ]
+}
+```
+
+---
+
+## 5. Endpoints Summary and Implementation Status
+
+| Endpoint | Method | Phase | Status | Purpose |
+|---|---|---|---|---|
+| `/api/v1/health` | GET | Phase 1 | Completed | Liveness probe |
+| `/api/v1/ready` | GET | Phase 1 | Completed | Readiness probe checking PostgreSQL |
+| `/api/v1/ingestion/jobs` | POST/GET | Phase 2 | Completed | Ingestion runner & job status |
+| `/api/v1/memory/search` | POST | Phase 3 | Completed | Temporal memory search & filtering |
+| `/api/v1/retrieval/search` | POST | Phase 4 | Completed | Hybrid lexical + semantic search endpoint |
+| `/api/v1/retrieval/process-query` | POST | Phase 4 | Completed | Deterministic query parsing endpoint |
+| `/api/v1/agent/query` | POST | Phase 5-6 | Completed | Stateful research agent query with citation validation |
+| `/api/v1/agent/sessions/{id}/query` | POST | Phase 5 | Completed | Multi-turn session-aware agent query |
+| `/api/v1/agent/sessions/{id}` | GET | Phase 5 | Completed | Session turn history retrieval |
+| `/api/v1/agent/status` | GET | Phase 5 | Completed | Agent status & runtime telemetry |
+| `/api/v1/brief/{team_id}` | GET/POST | Phase 7 | Planned | Generate pre-meeting brief for specified team |
+| `/api/v1/evaluations` | GET | Phase 9 | Planned | View evaluation benchmark results |
 

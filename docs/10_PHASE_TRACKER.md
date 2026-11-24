@@ -9,7 +9,7 @@
 | **03** | **Memory System & Temporal Architecture** | **Completed** | [PHASE_03_MEMORY_SYSTEM.md](./prompts/PHASE_03_MEMORY_SYSTEM.md) | Phase 2 | Persistent temporal memory, decision supersession, exact quotation validation, retrieval service |
 | **04** | **Hybrid Retrieval & Evidence Packs** | **Completed** | [PHASE_04_HYBRID_RETRIEVAL.md](./prompts/PHASE_04_HYBRID_RETRIEVAL.md) | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
 | **05** | **LangGraph Multi-Step Research Agent** | **Completed** | [PHASE_05_LANGGRAPH_AGENT.md](./prompts/PHASE_05_LANGGRAPH_AGENT.md) | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
-| **06** | **Deterministic Citation Validation** | **In Progress** | [PHASE_06_CITATION_VALIDATION.md](./prompts/PHASE_06_CITATION_VALIDATION.md) | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
+| **06** | **Deterministic Citation Validation** | **Completed** | [PHASE_06_CITATION_VALIDATION.md](./prompts/PHASE_06_CITATION_VALIDATION.md) | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule, retry loops |
 | **07** | **Team TS3012 Pre-Meeting Briefing** | **Planned** | `PHASE_07_TS3012_BRIEFING.md` | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
 | **08** | **React Frontend Interface** | **Planned** | `PHASE_08_REACT_FRONTEND.md` | Phase 7 | Full web UI for question research, answer review, and briefing display |
 | **09** | **Evaluation Benchmark & Submission Package** | **Planned** | `PHASE_09_EVALUATION_SUBMISSION.md` | Phase 8 | 25 answered questions, 10 author-verified benchmark, 3 failure analyses, 1,000 meeting estimate, `answers.json` |
@@ -106,3 +106,25 @@
 - [x] Total suite: 115 backend tests passing, 8 frontend tests passing (123 total).
 - [x] Architectural documentation (`LANGGRAPH_WORKFLOW.md`) and operational runbook (`AGENT_RUNBOOK.md`) completed.
 - [x] Zero Phase 6 code (dedicated citation validator agent, cross-meeting quote verification loops) prematurely created.
+
+---
+
+## Phase 6 Acceptance Gate Checklist
+- [x] Deterministic `CitationValidationService` implemented (`backend/app/services/citation_validation_service.py`).
+- [x] Case-insensitive meeting code resolution and exact verbatim quotation substring matching with normalized whitespace/casing.
+- [x] Six-word minimum per quotation strictly enforced ($\ge 6$ words).
+- [x] Single speaker turn boundary strictly enforced (rejects quotes stitched across multiple turns).
+- [x] Structural answer rules enforced: 1 to 3 plain sentences, 1 to 3 citations.
+- [x] Cross-meeting evidence requirement enforced: at least 2 distinct meetings of the named team cited.
+- [x] Speaker label and role consistency verified against transcript metadata.
+- [x] Claim grounding check enforced: answers introducing ungrounded claims with low lexical overlap ($< 20\%$) are rejected.
+- [x] Zero LLM dependency in citation exactness checking (strictly deterministic Python and SQL string operations).
+- [x] Pydantic v2 validation models (`CitationValidationItem`, `AnswerValidationResult`) implemented in `app.schemas.agent`.
+- [x] LangGraph `citation_validation` node integrated with conditional routing (`route_after_citation_validation`) and bounded retry loops (`max_validation_retries = 2`).
+- [x] Failure handling: retry exhaustion clears invalid citations, marks `validation_status = "FAILED"`, and returns explicit failure details.
+- [x] API response extended with `validation_status`, `validation_errors`, and `supporting_meetings`.
+- [x] 100% test pass rate on all 13 required validation failure mode scenarios (`backend/tests/test_citation_validation.py`).
+- [x] Full test suite passing: 128 backend tests + 8 frontend tests = 136 total tests (100% pass rate).
+- [x] Ruff linting and formatting passing with zero warnings or errors.
+- [x] Comprehensive architectural documentation (`docs/architecture/CITATION_VALIDATION_PIPELINE.md`) and operational runbook (`docs/operations/CITATION_VALIDATION_RUNBOOK.md`) completed.
+- [x] Zero Phase 7 code (pre-meeting briefing generator, TS3012 briefing prompt) prematurely created.

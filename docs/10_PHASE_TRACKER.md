@@ -10,7 +10,7 @@
 | **04** | **Hybrid Retrieval & Evidence Packs** | **Completed** | [PHASE_04_HYBRID_RETRIEVAL.md](./prompts/PHASE_04_HYBRID_RETRIEVAL.md) | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
 | **05** | **LangGraph Multi-Step Research Agent** | **Completed** | [PHASE_05_LANGGRAPH_AGENT.md](./prompts/PHASE_05_LANGGRAPH_AGENT.md) | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
 | **06** | **Deterministic Citation Validation** | **Completed** | [PHASE_06_CITATION_VALIDATION.md](./prompts/PHASE_06_CITATION_VALIDATION.md) | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule, retry loops |
-| **07** | **Team TS3012 Pre-Meeting Briefing** | **Planned** | `PHASE_07_TS3012_BRIEFING.md` | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
+| **07** | **Team TS3012 Pre-Meeting Briefing** | **Completed** | [PHASE_07_TS3012_BRIEFING.md](./prompts/PHASE_07_TS3012_BRIEFING.md) | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
 | **08** | **React Frontend Interface** | **Planned** | `PHASE_08_REACT_FRONTEND.md` | Phase 7 | Full web UI for question research, answer review, and briefing display |
 | **09** | **Evaluation Benchmark & Submission Package** | **Planned** | `PHASE_09_EVALUATION_SUBMISSION.md` | Phase 8 | 25 answered questions, 10 author-verified benchmark, 3 failure analyses, 1,000 meeting estimate, `answers.json` |
 
@@ -128,3 +128,26 @@
 - [x] Ruff linting and formatting passing with zero warnings or errors.
 - [x] Comprehensive architectural documentation (`docs/architecture/CITATION_VALIDATION_PIPELINE.md`) and operational runbook (`docs/operations/CITATION_VALIDATION_RUNBOOK.md`) completed.
 - [x] Zero Phase 7 code (pre-meeting briefing generator, TS3012 briefing prompt) prematurely created.
+
+---
+
+## Phase 7 Acceptance Gate Checklist
+- [x] Pre-meeting briefing service implemented (`backend/app/services/briefing_service.py`).
+- [x] Chronological meeting retrieval and ordering (`TS3012a` -> `TS3012b` -> `TS3012c`) preceding target meeting (`TS3012d`).
+- [x] Missing meeting coverage and sequence gaps detected and disclosed in Section 1 and Section 9.
+- [x] Speaker roster and functional roles verified against meeting metadata.
+- [x] Current decisions distinguished from historical/superseded decisions via temporal memory graph.
+- [x] Decision changes and supersessions captured with supporting quotations from both points in time and user research rationale.
+- [x] Open actions extracted with strict owner attribution (`EXPLICIT` vs `UNKNOWN`), excluding completed commitments.
+- [x] Unresolved disagreements identified with competing positions and involved speakers without inventing consensus.
+- [x] Claim-level citation validation enforced across every factual bullet using Phase 6 `CitationValidationService` ($\ge 6$ words).
+- [x] Professional 9-section Markdown briefing generated conforming to the prescribed structure.
+- [x] Briefing persistence model (`Briefing`) and Alembic migration `005_briefing_schema` implemented.
+- [x] Cached retrieval and version incrementing ($V_1 \rightarrow V_2$) verified on briefing regeneration.
+- [x] REST API endpoints (`/api/v1/briefings/generate`, `/api/v1/briefings/ts3012`, `/{team}/latest`, `/{team}/versions`, `/{id}`) implemented and tested.
+- [x] CLI subcommand `catalist brief --team TS3012` implemented with markdown, json, and save options.
+- [x] 100% test pass rate across all 11 briefing test scenarios (`backend/tests/test_briefing.py`).
+- [x] Full test suite passing: 139 backend tests + 8 frontend tests = 147 total tests (100% pass rate).
+- [x] Ruff linting and formatting passing with zero warnings or errors.
+- [x] Comprehensive architectural documentation (`docs/architecture/TS3012_BRIEFING_PIPELINE.md`) and operational runbook (`docs/operations/BRIEFING_GENERATION_RUNBOOK.md`) completed.
+- [x] Zero Phase 8 code (React frontend briefing components) or Phase 9 code (evaluation submission package) prematurely created.

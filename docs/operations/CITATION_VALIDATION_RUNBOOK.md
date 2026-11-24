@@ -121,3 +121,4 @@ The agent retries up to `max_validation_retries` (default: 2):
 - **Validation Pass Rate**: Expected $> 95\%$ on standard benchmark questions.
 - **Retry Frequency**: Most questions should pass on Attempt 0; retries should remain $< 15\%$.
 - **Exhausted Failures**: Should remain $< 2\%$, indicating robust retrieval and synthesis.
+

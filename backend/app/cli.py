@@ -13,6 +13,7 @@ from app.schemas.agent import AgentQueryRequest
 from app.schemas.memory import MemorySearchFilter
 from app.schemas.retrieval import RetrievalRequest
 from app.scripts.ingest_dataset import main as run_ingest
+from app.services.briefing_service import BriefingService
 from app.services.hybrid_retrieval_service import HybridRetrievalService
 from app.services.memory_extraction_service import MemoryExtractionService
 from app.services.memory_retrieval_service import MemoryRetrievalService
@@ -191,6 +192,47 @@ def handle_ask(args: argparse.Namespace) -> None:
         db.close()
 
 
+def handle_brief(args: argparse.Namespace) -> None:
+    """CLI handler for generating and printing pre-meeting briefings."""
+    db = get_db_session(args.database_url)
+    service = BriefingService(db=db)
+
+    try:
+        team = args.team or "TS3012"
+        target = args.before
+        regen = args.regenerate
+
+        print(
+            f"\nGenerating Pre-Meeting Briefing for Team {team} (before {target or 'final meeting'})..."
+        )
+        res = service.generate_briefing(
+            team_code=team,
+            target_meeting_code=target,
+            regenerate=regen,
+        )
+
+        if args.format == "json":
+            import json
+
+            output = json.dumps(res.model_dump(), indent=2, default=str)
+        else:
+            output = res.content_markdown
+
+        if args.save:
+            with open(args.save, "w", encoding="utf-8") as f:
+                f.write(output)
+            print(f"Briefing written to {args.save}")
+        else:
+            print("\n" + "=" * 80)
+            print(output)
+            print("=" * 80)
+            print(
+                f"Version: {res.version} | Validation: {res.validation_status} | Citations: {res.citations_count}"
+            )
+    finally:
+        db.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="catalist",
@@ -289,6 +331,29 @@ def main() -> None:
     )
     ask_parser.add_argument("--database-url", type=str, default=None, help="Optional database URL")
 
+    # Brief subcommand (Pre-Meeting Briefing)
+    brief_parser = subparsers.add_parser("brief", help="Generate or view pre-meeting briefing")
+    brief_parser.add_argument(
+        "--team", type=str, default="TS3012", help="Team code (default: TS3012)"
+    )
+    brief_parser.add_argument(
+        "--before", type=str, default=None, help="Upcoming meeting code (e.g. TS3012d)"
+    )
+    brief_parser.add_argument(
+        "--regenerate", action="store_true", help="Force recomputation and new version"
+    )
+    brief_parser.add_argument(
+        "--format",
+        type=str,
+        default="markdown",
+        choices=["markdown", "json"],
+        help="Output format (markdown or json)",
+    )
+    brief_parser.add_argument("--save", type=str, default=None, help="Path to save briefing file")
+    brief_parser.add_argument(
+        "--database-url", type=str, default=None, help="Optional database URL"
+    )
+
     args = parser.parse_args()
 
     if args.subcommand == "ingest":
@@ -312,6 +377,8 @@ def main() -> None:
         handle_retrieve(args)
     elif args.subcommand == "ask":
         handle_ask(args)
+    elif args.subcommand == "brief":
+        handle_brief(args)
     else:
         parser.print_help()
 

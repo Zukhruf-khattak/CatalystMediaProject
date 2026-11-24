@@ -1,4 +1,5 @@
 from app.models.agent import AgentSession
+from app.models.briefing import Briefing
 from app.models.dataset import (
     CrossDialectTSVector,
     CrossDialectVector,
@@ -19,6 +20,7 @@ from app.models.memory import (
 
 __all__ = [
     "AgentSession",
+    "Briefing",
     "Team",
     "Meeting",
     "Speaker",

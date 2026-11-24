@@ -1,8 +1,8 @@
 # Testing Strategy and Test Architecture
 
-**Phase:** Phase 6 — Deterministic Citation and Evidence Validation  
+**Phase:** Phase 7 — Team TS3012 Pre-Meeting Briefing  
 **Status:** Operational  
-**Coverage:** 128 automated backend tests + 8 frontend tests (136 total tests passing with 100% pass rate)
+**Coverage:** 139 automated backend tests + 8 frontend tests (147 total tests passing with 100% pass rate)
 
 ---
 
@@ -110,5 +110,19 @@ The `backend/tests/test_citation_validation.py` test suite covers all 13 critica
 11. `test_unsupported_answer_claims`: Answer with $< 20\%$ lexical overlap with citations is rejected for ungrounded claims.
 12. `test_successful_validation_and_retry_behavior`: Agent retries on invalid candidate answer and succeeds when corrected.
 13. `test_insufficient_evidence_after_retries`: Exhausting retries halts cleanly, clears invalid citations, and sets failure answer.
+
+### 3.7. Phase 7 Pre-Meeting Briefing Tests (11 Test Cases)
+The `backend/tests/test_briefing.py` test suite validates all requirements of the pre-meeting briefing engine:
+1. `test_ts3012_meeting_filtering_and_chronology`: Chronological filtering of meetings preceding target meeting `TS3012d`.
+2. `test_current_decision_identification`: Distinguishing active confirmed decisions (`CURRENT`) with verbatim quotations.
+3. `test_decision_supersession_and_changes`: Tracking historical decisions and superseding changes with evidence from both meetings.
+4. `test_open_actions_and_owner_assignment`: Extracting commitments, explicit owners, and unknown owner disclosure.
+5. `test_disagreement_detection_and_resolution`: Capturing disputed positions (e.g. removable cover) and competing parties.
+6. `test_claim_level_citation_validation`: Verifying that every factual bullet citation passes `CitationValidationService` ($\ge 6$ words).
+7. `test_missing_meeting_coverage_disclosure`: Disclosing intermediate sequence gaps (e.g. missing `TS3012b`) in coverage notices.
+8. `test_empty_or_incomplete_team_history`: Graceful degradation and boundary notices when team has no meetings in database.
+9. `test_briefing_persistence_and_versioning`: Database persistence, cached lookups, and version increments ($V_1 \rightarrow V_2$).
+10. `test_briefing_api_endpoints`: REST endpoints (`/generate`, `/ts3012`, `/{team}/latest`, `/{team}/versions`, `/{id}`).
+11. `test_briefing_cli_command`: CLI execution of `catalist brief --team TS3012`.
 
 

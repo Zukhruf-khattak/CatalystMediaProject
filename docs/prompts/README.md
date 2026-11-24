@@ -21,7 +21,7 @@ This directory stores the complete, copy-paste-ready Antigravity implementation 
 | 04 | [PHASE_04_HYBRID_RETRIEVAL.md](./PHASE_04_HYBRID_RETRIEVAL.md) | Completed | PostgreSQL FTS + pgvector hybrid retrieval with RRF and evidence packs |
 | 05 | [PHASE_05_LANGGRAPH_AGENT.md](./PHASE_05_LANGGRAPH_AGENT.md) | Completed | Stateful multi-step research agent with tool use and checkpoints |
 | 06 | [PHASE_06_CITATION_VALIDATION.md](./PHASE_06_CITATION_VALIDATION.md) | Completed | Deterministic exact-quote and citation validation |
-| 07 | `PHASE_07_TS3012_BRIEFING.md` | Planned | Team TS3012 pre-meeting briefing generation |
+| 07 | [PHASE_07_TS3012_BRIEFING.md](./PHASE_07_TS3012_BRIEFING.md) | Completed | Team TS3012 pre-meeting briefing generation |
 | 08 | `PHASE_08_REACT_FRONTEND.md` | Planned | Full research, answer review, and briefing UI |
 | 09 | `PHASE_09_EVALUATION_SUBMISSION.md` | Planned | Evaluation, failure analysis, scale estimate, `answers.json`, and submission package |
 

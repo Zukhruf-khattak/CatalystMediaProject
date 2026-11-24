@@ -235,6 +235,10 @@ The Catalist Meeting Intelligence API is served over HTTP/JSON under the prefix 
 | `/api/v1/agent/sessions/{id}/query` | POST | Phase 5 | Completed | Multi-turn session-aware agent query |
 | `/api/v1/agent/sessions/{id}` | GET | Phase 5 | Completed | Session turn history retrieval |
 | `/api/v1/agent/status` | GET | Phase 5 | Completed | Agent status & runtime telemetry |
-| `/api/v1/brief/{team_id}` | GET/POST | Phase 7 | Planned | Generate pre-meeting brief for specified team |
+| `/api/v1/briefings/generate` | POST | Phase 7 | Completed | Generate pre-meeting briefing with citation validation |
+| `/api/v1/briefings/ts3012` | GET | Phase 7 | Completed | Convenience endpoint for Team TS3012 pre-meeting brief |
+| `/api/v1/briefings/{team_code}/latest` | GET | Phase 7 | Completed | Retrieve highest version briefing for team |
+| `/api/v1/briefings/{team_code}/versions` | GET | Phase 7 | Completed | List historical and current briefing versions |
+| `/api/v1/briefings/{briefing_id}` | GET | Phase 7 | Completed | Retrieve specific briefing record by UUID |
 | `/api/v1/evaluations` | GET | Phase 9 | Planned | View evaluation benchmark results |
 

@@ -7,6 +7,17 @@ from app.schemas.agent import (
     AnswerValidationResult,
     CitationValidationItem,
 )
+from app.schemas.briefing import (
+    ActionItem,
+    BriefingCitation,
+    BriefingGenerateRequest,
+    BriefingListResponse,
+    BriefingResponse,
+    DecisionChangeItem,
+    DecisionItem,
+    DisagreementItem,
+    TimelineMeetingItem,
+)
 from app.schemas.dataset import (
     IngestionJobCreate,
     IngestionJobListResponse,
@@ -46,6 +57,15 @@ __all__ = [
     "AgentStatusResponse",
     "AnswerValidationResult",
     "CitationValidationItem",
+    "BriefingCitation",
+    "TimelineMeetingItem",
+    "DecisionItem",
+    "DecisionChangeItem",
+    "ActionItem",
+    "DisagreementItem",
+    "BriefingGenerateRequest",
+    "BriefingResponse",
+    "BriefingListResponse",
     "ParsedSpeaker",
     "ParsedTurn",
     "ParsedMeeting",

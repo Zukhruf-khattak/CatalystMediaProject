@@ -61,8 +61,8 @@ flowchart TD
 2. **`app/services/`**:
    - Encapsulates pure business logic.
    - Independent of HTTP transport (can be invoked by CLI or background workers).
-   - Ingestion service, temporal memory service, hybrid retrieval service, and deterministic citation validation service (`CitationValidationService`).
-   - Validates verbatim speaker turn substrings, single-turn boundaries, sentence bounds (1-3 sentences), citation counts (1-3), and multi-meeting evidence coverage.
+   - Ingestion service, temporal memory service, hybrid retrieval service, deterministic citation validation service (`CitationValidationService`), and pre-meeting briefing service (`BriefingService`).
+   - Generates structured 9-section briefings with chronological meeting timelines, current decisions, decision supersessions, open actions, and claim-level citation validation.
 3. **`app/core/`**:
    - System settings (`config.py`).
    - Structured JSON logging (`logging.py`).

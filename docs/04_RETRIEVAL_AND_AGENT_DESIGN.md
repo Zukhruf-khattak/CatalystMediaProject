@@ -73,11 +73,25 @@ If validation fails, the LangGraph agent executes a bounded retry loop (up to 2 
 
 ---
 
-## 6. Phase Boundaries
+## 6. Pre-Meeting Briefing Engine (Implemented in Phase 7)
+
+The `BriefingService` generates verifiable pre-meeting intelligence briefings for teams (such as Team TS3012 before final meeting TS3012d):
+1. **Chronological Retrieval**: Gathers meeting history in ascending order (`a` -> `b` -> `c`) and flags sequence gaps.
+2. **Current Decisions**: Surfaces active confirmed decisions, filtering out superseded ones.
+3. **Decision Supersession**: Captures decision evolution (e.g. plastic -> rubber casing; kinetic -> basic battery) with supporting quotations from both points in time and user research rationale.
+4. **Open Actions & Owners**: Extracts commitments with explicit ownership attribution; marks ambiguous assignees as `Unknown / Unassigned`.
+5. **Unresolved Disagreements**: Surfaces active disputes (e.g. removable fruit cover vs fixed casing).
+6. **Claim-Level Citation Validation**: Enforces $\ge 6$ words exact quote verification for every factual point using `CitationValidationService`.
+7. **Versioned Persistence**: Stores briefings in PostgreSQL with version increments ($V_1 \rightarrow V_2$). Full pipeline details in [TS3012_BRIEFING_PIPELINE.md](./architecture/TS3012_BRIEFING_PIPELINE.md).
+
+---
+
+## 7. Phase Boundaries
 - **Implemented in Phase 1**: Observability hooks, LangSmith tracing configuration.
 - **Implemented in Phase 2**: Transcript dataset storage, PostgreSQL tsvector, and local embeddings.
 - **Implemented in Phase 3**: Temporal memory schema, exact evidence validator, decision supersession engine, memory extraction service, paginated memory retrieval service, and CLI/REST endpoints.
 - **Implemented in Phase 4**: Hybrid retrieval pipeline (`HybridRetrievalService`), Query Processor (`QueryProcessor`), RRF rank fusion (`reciprocal_rank_fusion`), REST endpoints (`/api/v1/retrieval/*`), CLI subcommand (`catalist retrieve`), and comparative evaluation harness (`retrieval_eval.py`).
 - **Implemented in Phase 5**: LangGraph state machine, tool use, loop guards, session checkpointing, and REST/CLI query interfaces.
 - **Implemented in Phase 6**: Deterministic citation validation layer (`CitationValidationService`), response validation node, feedback retry state machine, and comprehensive 13-failure-mode test suite.
-- **Deferred to Phase 7**: Team TS3012 pre-meeting briefing generator.
+- **Implemented in Phase 7**: Pre-meeting briefing engine (`BriefingService`), versioned persistence (`Briefing`), REST endpoints (`/api/v1/briefings/*`), and CLI subcommand (`catalist brief`).
+- **Deferred to Phase 8**: React web frontend interface.

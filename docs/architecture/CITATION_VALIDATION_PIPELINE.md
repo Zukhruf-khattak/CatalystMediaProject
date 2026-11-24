@@ -139,3 +139,4 @@ Every agent query response returned over REST or CLI includes:
 - `validation_status`: `"PASSED"`, `"FAILED"`, or `"SKIPPED"`.
 - `validation_errors`: Array of strings explaining any validation issues.
 - `supporting_meetings`: Array of validated meeting codes providing evidence.
+

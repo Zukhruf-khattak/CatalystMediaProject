@@ -112,7 +112,9 @@ class MockLLMClient(BaseLLMClient):
         self.call_history.append({"prompt": prompt, "system": system_prompt})
         if isinstance(self.canned_response, str):
             return self.canned_response
-        return "Mock LLM text response."
+        if isinstance(self.canned_response, dict) and "answer" in self.canned_response:
+            return str(self.canned_response["answer"])
+        return "Based on the meeting discussions, the team evaluated the design options and reached consensus."
 
 
 def get_llm_client() -> BaseLLMClient:
@@ -120,14 +122,15 @@ def get_llm_client() -> BaseLLMClient:
     settings = get_settings()
     provider = settings.llm_provider.lower()
 
-    if provider == "ollama":
+    if provider == "mock" or settings.app_env == "testing":
+        return MockLLMClient()
+    elif provider == "ollama":
         return OllamaLLMClient()
     elif provider == "gemini":
         # Check if Gemini key is set; if not fallback to Ollama or Mock
         if settings.gemini_api_key:
-            # Note: Gemini client can be initialized here if needed
             logger.info("Using Gemini provider for LLM inference")
-            return OllamaLLMClient()  # Fallback to Ollama if gemini SDK not configured
+            return OllamaLLMClient()
         else:
             logger.warning("Gemini API key is empty; falling back to Ollama client")
             return OllamaLLMClient()

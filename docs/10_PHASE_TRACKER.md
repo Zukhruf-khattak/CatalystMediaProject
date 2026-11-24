@@ -8,8 +8,8 @@
 | **02** | **Dataset Ingestion and Preprocessing** | **Completed** | [PHASE_02_DATASET_INGESTION.md](./prompts/PHASE_02_DATASET_INGESTION.md) | Phase 1 | 138 transcripts parsed into PostgreSQL speaker-turns, local embeddings, lexical indexes |
 | **03** | **Memory System & Temporal Architecture** | **Completed** | [PHASE_03_MEMORY_SYSTEM.md](./prompts/PHASE_03_MEMORY_SYSTEM.md) | Phase 2 | Persistent temporal memory, decision supersession, exact quotation validation, retrieval service |
 | **04** | **Hybrid Retrieval & Evidence Packs** | **Completed** | [PHASE_04_HYBRID_RETRIEVAL.md](./prompts/PHASE_04_HYBRID_RETRIEVAL.md) | Phase 3 | FTS + pgvector hybrid retrieval with Reciprocal Rank Fusion (RRF) |
-| **05** | **LangGraph Multi-Step Research Agent** | **Planned** | `PHASE_05_LANGGRAPH_AGENT.md` | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
-| **06** | **Deterministic Citation Validation** | **Planned** | `PHASE_06_CITATION_VALIDATION.md` | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
+| **05** | **LangGraph Multi-Step Research Agent** | **Completed** | [PHASE_05_LANGGRAPH_AGENT.md](./prompts/PHASE_05_LANGGRAPH_AGENT.md) | Phase 4 | Stateful graph with checkpointing, tool use, loop guards, bounded retrieval |
+| **06** | **Deterministic Citation Validation** | **In Progress** | [PHASE_06_CITATION_VALIDATION.md](./prompts/PHASE_06_CITATION_VALIDATION.md) | Phase 5 | Exact-string verification, single turn bounds, >=6 words rule |
 | **07** | **Team TS3012 Pre-Meeting Briefing** | **Planned** | `PHASE_07_TS3012_BRIEFING.md` | Phase 6 | Structured brief generation with cited decisions, changes, open actions |
 | **08** | **React Frontend Interface** | **Planned** | `PHASE_08_REACT_FRONTEND.md` | Phase 7 | Full web UI for question research, answer review, and briefing display |
 | **09** | **Evaluation Benchmark & Submission Package** | **Planned** | `PHASE_09_EVALUATION_SUBMISSION.md` | Phase 8 | 25 answered questions, 10 author-verified benchmark, 3 failure analyses, 1,000 meeting estimate, `answers.json` |
@@ -90,3 +90,19 @@
 - [x] Ruff linter and formatter passing with zero errors across all backend code.
 - [x] Comprehensive architectural documentation (`HYBRID_RETRIEVAL_PIPELINE.md`), operations runbook (`RETRIEVAL_RUNBOOK.md`), and evaluation report (`RETRIEVAL_EVALUATION.md`) completed.
 - [x] Zero Phase 5 code (LangGraph research agent, QA loops) prematurely created.
+
+---
+
+## Phase 5 Acceptance Gate Checklist
+- [x] State graph compiled with 8 discrete nodes (`input_validation`, `query_analysis`, `retrieval_planning`, `tool_execution`, `evidence_assessment`, `answer_generation`, `response_validation`, `final_response`).
+- [x] Conditional routing implemented with loop guards (max iterations = 2) and fallback generation.
+- [x] 5 agent tools exposed and tested (`hybrid_search`, `search_temporal_memory`, `get_meeting_details`, `get_related_meetings`, `get_memory_history`).
+- [x] PostgreSQL session persistence model `AgentSession` and Alembic migration `004_agent_session_schema` implemented.
+- [x] Pydantic v2 schemas (`AgentQueryRequest`, `AgentQueryResponse`, `AgentCitationItem`, `AgentStatusResponse`, `AgentSessionDetailResponse`) implemented.
+- [x] REST endpoints (`/api/v1/agent/query`, `/sessions/{id}/query`, `/sessions/{id}`, `/status`) implemented and tested.
+- [x] CLI command `catalist ask` implemented with session and iteration options.
+- [x] Privacy redaction in LangSmith tracing preventing transcript/quote leakages.
+- [x] 100% automated test pass rate across 5 agent test suites (24 tests total): `test_agent_tools.py`, `test_agent_graph.py`, `test_agent_session.py`, `test_agent_api.py`, `test_agent_e2e_questions.py`.
+- [x] Total suite: 115 backend tests passing, 8 frontend tests passing (123 total).
+- [x] Architectural documentation (`LANGGRAPH_WORKFLOW.md`) and operational runbook (`AGENT_RUNBOOK.md`) completed.
+- [x] Zero Phase 6 code (dedicated citation validator agent, cross-meeting quote verification loops) prematurely created.

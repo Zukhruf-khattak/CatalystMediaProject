@@ -91,7 +91,7 @@ class Settings(BaseSettings):
     )
 
     # Model Provider Settings
-    llm_provider: Literal["ollama", "gemini"] = Field(
+    llm_provider: Literal["ollama", "gemini", "mock"] = Field(
         default="ollama",
         description="Primary LLM provider (local-first)",
     )

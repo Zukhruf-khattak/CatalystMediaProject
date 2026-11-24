@@ -1,3 +1,10 @@
+from app.schemas.agent import (
+    AgentCitationItem,
+    AgentQueryRequest,
+    AgentQueryResponse,
+    AgentSessionDetailResponse,
+    AgentStatusResponse,
+)
 from app.schemas.dataset import (
     IngestionJobCreate,
     IngestionJobListResponse,
@@ -30,6 +37,11 @@ from app.schemas.retrieval import (
 )
 
 __all__ = [
+    "AgentCitationItem",
+    "AgentQueryRequest",
+    "AgentQueryResponse",
+    "AgentSessionDetailResponse",
+    "AgentStatusResponse",
     "ParsedSpeaker",
     "ParsedTurn",
     "ParsedMeeting",

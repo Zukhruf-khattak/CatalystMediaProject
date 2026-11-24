@@ -61,4 +61,3 @@ def test_evaluation_empty_inputs():
     assert calculate_recall_at_k([], ["battery"], k=5) == 0.0
     assert calculate_precision_at_k([], ["battery"], k=5) == 0.0
     assert calculate_reciprocal_rank([], ["battery"]) == 0.0
-

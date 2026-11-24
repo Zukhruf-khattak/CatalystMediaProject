@@ -44,10 +44,22 @@ def configure_tracing(settings: Settings) -> bool:
 def redact_trace_metadata(metadata: Dict[str, str]) -> Dict[str, str]:
     """
     Enforces trace privacy and redaction policy.
-    Ensures secrets, raw transcript text, and authorization tokens are scrubbed.
+    Ensures secrets, raw transcript text, quotations, and authorization tokens are scrubbed
+    before any telemetry is dispatched to external observability systems like LangSmith.
     """
     redacted = {}
-    sensitive_keys = {"api_key", "password", "token", "transcript_raw", "secret"}
+    sensitive_keys = {
+        "api_key",
+        "password",
+        "token",
+        "transcript_raw",
+        "secret",
+        "raw_text",
+        "transcript",
+        "quote",
+        "quotation",
+        "utterance",
+    }
     for k, v in metadata.items():
         if any(s in k.lower() for s in sensitive_keys):
             redacted[k] = "[REDACTED]"

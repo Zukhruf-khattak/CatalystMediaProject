@@ -306,9 +306,13 @@ class HybridRetrievalService:
 
         # Merge explicit request filters with extracted filters
         team_code = request.team_code or processed.extracted_team
-        meeting_code = request.meeting_code or (
-            processed.extracted_meetings[0] if processed.extracted_meetings else None
-        )
+        meeting_code = request.meeting_code
+        if (
+            not meeting_code
+            and len(processed.extracted_meetings) == 1
+            and not processed.temporal_intent
+        ):
+            meeting_code = processed.extracted_meetings[0]
 
         filters = RetrievalFilter(
             team_code=team_code,

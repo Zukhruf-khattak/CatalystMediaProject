@@ -12,6 +12,7 @@ os.environ["APP_ENV"] = "testing"
 os.environ["DEBUG"] = "true"
 os.environ["DATABASE_URL"] = "sqlite:///:memory:"
 os.environ["LANGSMITH_TRACING"] = "false"
+os.environ["LLM_PROVIDER"] = "mock"
 
 from app.db.base import Base
 from app.db.session import get_db

@@ -47,4 +47,3 @@ def process_query(
     """Extract team codes, meeting codes, speaker references, topics, and temporal intent."""
     processor = get_query_processor()
     return processor.process_query(request.query)
-

@@ -5,9 +5,11 @@ from typing import Optional
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
+from app.agent.service import AgentService
 from app.core.config import get_settings
 from app.core.logging import get_logger
 from app.models.dataset import Meeting, Team
+from app.schemas.agent import AgentQueryRequest
 from app.schemas.memory import MemorySearchFilter
 from app.schemas.retrieval import RetrievalRequest
 from app.scripts.ingest_dataset import main as run_ingest
@@ -153,6 +155,42 @@ def handle_retrieve(args: argparse.Namespace) -> None:
         db.close()
 
 
+def handle_ask(args: argparse.Namespace) -> None:
+    """CLI handler for querying the LangGraph meeting research agent."""
+    db = get_db_session(args.database_url)
+    service = AgentService(db=db)
+
+    try:
+        req = AgentQueryRequest(
+            question=args.query,
+            team_code=args.team_code,
+            session_id=args.session_id,
+            max_iterations=args.max_iterations,
+        )
+        print(f"\nSubmitting question to Catalist Agent: '{args.query}'...")
+        res = service.query(req)
+
+        print("\n" + "=" * 80)
+        print("CATALIST AGENT RESPONSE")
+        print("=" * 80)
+        print(f"QUESTION:    {res.question}")
+        print(f"SESSION ID:  {res.session_id}")
+        print(f"SUFFICIENT:  {res.is_sufficient}")
+        if res.insufficient_reason:
+            print(f"REASON:      {res.insufficient_reason}")
+        print(f"ITERATIONS:  {res.iteration_count}")
+        print(f"STEPS:       {' -> '.join(res.steps_taken)}")
+        print("\n--- ANSWER ---")
+        print(res.answer)
+        print("\n--- CITATIONS ---")
+        for idx, cite in enumerate(res.citations, 1):
+            spk = f" ({cite.speaker_label})" if cite.speaker_label else ""
+            print(f'[{idx}] {cite.meeting_id}{spk}: "{cite.quote}"')
+        print("=" * 80 + "\n")
+    finally:
+        db.close()
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="catalist",
@@ -241,6 +279,16 @@ def main() -> None:
         "--database-url", type=str, default=None, help="Optional database URL"
     )
 
+    # Ask subcommand (LangGraph Agent)
+    ask_parser = subparsers.add_parser("ask", help="Ask questions using LangGraph agent")
+    ask_parser.add_argument("--query", type=str, required=True, help="Question to ask")
+    ask_parser.add_argument("--team-code", type=str, help="Target team code (e.g. TS3006)")
+    ask_parser.add_argument("--session-id", type=str, help="Resume conversation session UUID")
+    ask_parser.add_argument(
+        "--max-iterations", type=int, default=2, help="Max retrieval loop iterations"
+    )
+    ask_parser.add_argument("--database-url", type=str, default=None, help="Optional database URL")
+
     args = parser.parse_args()
 
     if args.subcommand == "ingest":
@@ -262,6 +310,8 @@ def main() -> None:
         handle_search_memory(args)
     elif args.subcommand == "retrieve":
         handle_retrieve(args)
+    elif args.subcommand == "ask":
+        handle_ask(args)
     else:
         parser.print_help()
 

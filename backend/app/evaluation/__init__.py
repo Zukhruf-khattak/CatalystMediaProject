@@ -17,4 +17,3 @@ __all__ = [
     "calculate_precision_at_k",
     "calculate_reciprocal_rank",
 ]
-

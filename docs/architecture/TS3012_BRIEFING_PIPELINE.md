@@ -96,3 +96,4 @@ Briefings are stored in the `briefings` table:
 - **Automatic Version Increment**: Calling `generate_briefing` with `regenerate=True` increments the version number ($V_1 \rightarrow V_2 \rightarrow V_3$).
 - **Caching**: Calling `generate_briefing` with `regenerate=False` returns the existing latest version immediately.
 - **Auditability**: Complete structured JSON payload, generation metadata, duration, and validation errors are persisted alongside the Markdown report.
+

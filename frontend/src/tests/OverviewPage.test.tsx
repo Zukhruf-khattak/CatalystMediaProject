@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter } from "react-router-dom";
 import { OverviewPage } from "../pages/OverviewPage";
 
 // Mock the API calls so test runs cleanly and deterministically
@@ -26,7 +27,9 @@ function renderWithClient(ui: React.ReactElement) {
   });
   return render(
     <QueryClientProvider client={queryClient}>
-      {ui}
+      <BrowserRouter>
+        {ui}
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }

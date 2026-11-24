@@ -1,5 +1,14 @@
 import { NavLink } from "react-router-dom";
-import { LayoutDashboard, Database, HelpCircle, FileText, BarChart3 } from "lucide-react";
+import {
+  LayoutDashboard,
+  Sparkles,
+  Quote,
+  Layers,
+  GitBranch,
+  FileText,
+  HardDrive,
+  BarChart3,
+} from "lucide-react";
 import { cn } from "../lib/utils";
 
 const navigationItems = [
@@ -7,35 +16,49 @@ const navigationItems = [
     name: "Overview & Status",
     href: "/",
     icon: LayoutDashboard,
-    ready: true,
+    badge: "Phase 1",
+  },
+  {
+    name: "Research Assistant",
+    href: "/research",
+    icon: Sparkles,
+    badge: "Phase 5",
+  },
+  {
+    name: "Citation Context",
+    href: "/citations",
+    icon: Quote,
+    badge: "Phase 6",
+  },
+  {
+    name: "Memory Explorer",
+    href: "/memory",
+    icon: Layers,
+    badge: "Phase 3",
+  },
+  {
+    name: "Decision Timeline",
+    href: "/decisions",
+    icon: GitBranch,
+    badge: "Phase 3",
+  },
+  {
+    name: "TS3012 Briefing",
+    href: "/briefing",
+    icon: FileText,
+    badge: "Phase 7",
   },
   {
     name: "Meeting Ingestion",
     href: "/ingestion",
-    icon: Database,
-    ready: false,
+    icon: HardDrive,
     badge: "Phase 2",
-  },
-  {
-    name: "Question Research",
-    href: "/questions",
-    icon: HelpCircle,
-    ready: false,
-    badge: "Phase 5",
-  },
-  {
-    name: "Team Briefings",
-    href: "/briefings",
-    icon: FileText,
-    ready: false,
-    badge: "Phase 7",
   },
   {
     name: "Evaluation Benchmark",
     href: "/evaluation",
     icon: BarChart3,
-    ready: false,
-    badge: "Phase 9",
+    badge: "Phase 4 & 6",
   },
 ];
 
@@ -45,7 +68,7 @@ export function Sidebar() {
       <div className="space-y-6">
         <div>
           <h2 className="px-3 text-xs font-semibold uppercase tracking-wider text-slate-400">
-            Navigation
+            Intelligence Platform
           </h2>
           <nav className="mt-3 space-y-1">
             {navigationItems.map((item) => {
@@ -81,11 +104,10 @@ export function Sidebar() {
 
       <div className="border-t border-slate-800/80 pt-4 px-3">
         <div className="text-xs text-slate-400">
-          <p className="font-medium text-slate-400">Catalist Assessment Shell</p>
-          <p className="mt-0.5">Phase 1 Foundation</p>
+          <p className="font-medium text-slate-400">Catalist Meeting Intelligence</p>
+          <p className="mt-0.5">Production UI · Phase 8</p>
         </div>
       </div>
     </aside>
   );
 }
-

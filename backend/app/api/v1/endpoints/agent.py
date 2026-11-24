@@ -1,6 +1,7 @@
 """FastAPI endpoints exposing the LangGraph multi-step meeting intelligence agent."""
 
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import StreamingResponse
 from sqlalchemy.orm import Session
 
 from app.agent.service import AgentService
@@ -34,6 +35,23 @@ def run_agent_query(
     """Submit a question to the LangGraph meeting research agent."""
     service = AgentService(db=db)
     return service.query(request)
+
+
+@router.post(
+    "/query/stream",
+    status_code=status.HTTP_200_OK,
+    summary="Stream LangGraph agent query stages using Server-Sent Events (SSE)",
+)
+def stream_agent_query(
+    request: AgentQueryRequest,
+    db: Session = Depends(get_db),
+):
+    """Execute LangGraph agent with real-time SSE stage events."""
+    service = AgentService(db=db)
+    return StreamingResponse(
+        service.stream_query(request),
+        media_type="text/event-stream",
+    )
 
 
 @router.post(

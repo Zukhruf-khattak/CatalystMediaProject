@@ -188,6 +188,60 @@ class AgentService:
             supporting_meetings=result_state.get("supporting_meetings") or [],
         )
 
+    def stream_query(self, request: AgentQueryRequest):
+        """
+        Stream LangGraph execution node-by-node using Server-Sent Events (SSE).
+        Yields discrete stage events followed by the final AgentQueryResponse payload.
+        """
+        import json
+
+        session_id = request.session_id or str(uuid.uuid4())
+        initial_state: AgentState = {
+            "question": request.question,
+            "team_code": request.team_code,
+            "session_id": session_id,
+            "iteration": 0,
+            "max_iterations": request.max_iterations,
+            "steps_taken": [],
+        }
+        config = {"configurable": {"thread_id": session_id}}
+
+        yield f"event: stage\ndata: {json.dumps({'stage': 'input_validation', 'description': 'Validating question parameters and session context', 'timestamp': datetime.now(timezone.utc).isoformat()})}\n\n"
+
+        stage_descriptions = {
+            "input_validation": "Validating question and session context",
+            "query_analysis": "Analyzing query, extracting team, meetings, and topics",
+            "retrieval_planning": "Formulating hybrid retrieval and memory search strategy",
+            "tool_execution": "Executing hybrid search across transcript turns and memory graph",
+            "evidence_assessment": "Evaluating sufficiency and cross-meeting evidence coverage",
+            "answer_generation": "Synthesizing grounded answer from retrieved evidence",
+            "citation_validation": "Deterministically verifying citations, word counts, and turns",
+            "response_validation": "Validating complete answer structure and citations",
+            "final_response": "Assembling final structured payload",
+        }
+
+        try:
+            for step_output in self.graph.stream(initial_state, config=config):
+                node_name = list(step_output.keys())[0] if step_output else "node"
+                node_data = step_output.get(node_name, {})
+                desc = stage_descriptions.get(node_name, f"Executing {node_name}")
+                payload = {
+                    "stage": node_name,
+                    "description": desc,
+                    "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "is_sufficient": node_data.get("is_sufficient"),
+                    "validation_status": node_data.get("validation_status"),
+                    "citations_count": len(node_data.get("citations") or []),
+                }
+                yield f"event: stage\ndata: {json.dumps(payload)}\n\n"
+        except Exception as e:
+            logger.error(f"SSE stream error: {e}", exc_info=True)
+            yield f"event: error\ndata: {json.dumps({'error': str(e)})}\n\n"
+            return
+
+        final_res = self.query(request)
+        yield f"event: final\ndata: {json.dumps(final_res.model_dump(), default=str)}\n\n"
+
     def query_session(self, session_id: str, request: AgentQueryRequest) -> AgentQueryResponse:
         """
         Execute a session-aware query, resuming existing conversational thread state.

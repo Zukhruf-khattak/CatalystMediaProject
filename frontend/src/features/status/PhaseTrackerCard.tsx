@@ -15,50 +15,50 @@ const PHASES: PhaseInfo[] = [
     id: "02",
     number: "Phase 2",
     title: "Dataset Ingestion & Indexing",
-    status: "ready",
+    status: "completed",
     description: "Resumable parsing of 138 AMI transcripts into verbatim speaker turns, local embeddings, and FTS lexical indices.",
   },
   {
     id: "03",
     number: "Phase 3",
     title: "Memory System & Temporal Architecture",
-    status: "planned",
+    status: "completed",
     description: "Short-term context memory, persistent decision lifecycle tracking, and chronological superseding logic.",
   },
   {
     id: "04",
     number: "Phase 4",
     title: "Hybrid Retrieval Engine",
-    status: "planned",
-    description: "Reciprocal Rank Fusion (RRF) combining PostgreSQL full-text search with pgvector cosine distance.",
+    status: "completed",
+    description: "Reciprocal Rank Fusion (RRF k=60) combining PostgreSQL full-text search with pgvector cosine distance.",
   },
   {
     id: "05",
     number: "Phase 5",
     title: "LangGraph Multi-Step Research Agent",
-    status: "planned",
-    description: "Stateful research loop with query refinement, bounded context retrieval, and checkpointing.",
+    status: "completed",
+    description: "Stateful research loop with query refinement, bounded context retrieval, SSE streaming, and checkpointing.",
   },
   {
     id: "06",
     number: "Phase 6",
     title: "Deterministic Citation Validation",
-    status: "planned",
+    status: "completed",
     description: "Word-for-word string verification against source turns with single-turn bounds and >= 6 words rule.",
   },
   {
     id: "07",
     number: "Phase 7",
     title: "Team TS3012 Pre-Meeting Briefing",
-    status: "planned",
+    status: "completed",
     description: "Synthesized executive pre-meeting brief covering decisions, changes, open actions, and disagreements.",
   },
   {
     id: "08",
     number: "Phase 8",
     title: "Interactive React UI & Visualizer",
-    status: "planned",
-    description: "Full research query interface, interactive answer review, and cited briefing reader.",
+    status: "completed",
+    description: "Full research query interface, interactive citation context inspector, decision timeline, and briefing reader.",
   },
   {
     id: "09",
@@ -77,7 +77,7 @@ export function PhaseTrackerCard() {
           Implementation Roadmap & Phase Tracker
         </CardTitle>
         <CardDescription>
-          Static architectural plan showing incremental deliverables. No speculative or faked operational metrics.
+          Verified architectural progress across all engineering phases.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -125,4 +125,3 @@ export function PhaseTrackerCard() {
     </Card>
   );
 }
-

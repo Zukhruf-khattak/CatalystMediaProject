@@ -25,12 +25,15 @@ describe("App", () => {
     expect(screen.getByText("Overview & Status")).toBeInTheDocument();
   });
 
-  it("renders sidebar navigation links with future phase badges", () => {
+  it("renders sidebar navigation links across all intelligence phases", () => {
     render(<App />);
+    expect(screen.getByText("Overview & Status")).toBeInTheDocument();
+    expect(screen.getByText("Research Assistant")).toBeInTheDocument();
+    expect(screen.getByText("Citation Context")).toBeInTheDocument();
+    expect(screen.getByText("Memory Explorer")).toBeInTheDocument();
+    expect(screen.getByText("Decision Timeline")).toBeInTheDocument();
+    expect(screen.getByText("TS3012 Briefing")).toBeInTheDocument();
     expect(screen.getByText("Meeting Ingestion")).toBeInTheDocument();
-    expect(screen.getAllByText("Phase 2").length).toBeGreaterThan(0);
-    expect(screen.getByText("Question Research")).toBeInTheDocument();
-    expect(screen.getByText("Team Briefings")).toBeInTheDocument();
     expect(screen.getByText("Evaluation Benchmark")).toBeInTheDocument();
   });
 });

@@ -112,3 +112,4 @@ If `validation_status` is `WARNING`:
 - **Regeneration Cadence**: Trigger regeneration automatically whenever new meetings are ingested for a team via the ingestion job webhook.
 - **Storage Profile**: Each briefing record averages ~8KB of Markdown and structured JSON. Storing 100 versions per team across 1,000 teams requires $< 1$ GB of PostgreSQL storage.
 - **Latency**: Generating a briefing with citation validation on a 4-meeting team takes $< 150$ ms on standard CPU hardware.
+

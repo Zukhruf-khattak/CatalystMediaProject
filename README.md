@@ -25,6 +25,8 @@ Evaluated on the **AMI Meeting Corpus** (138 real meetings, ~676,000 words acros
    *Executive high-density architectural and empirical report.*
 5. **3–5 Minute Live Demo Script**: [`docs/DEMO_SCRIPT.md`](./docs/DEMO_SCRIPT.md)  
    *Step-by-step walkthrough script for live presentation.*
+6. **Technical Interview Defense Guide**: [`docs/INTERVIEW_DEFENSE_GUIDE.md`](./docs/INTERVIEW_DEFENSE_GUIDE.md)  
+   *In-depth answers to 6 core architecture interview questions (hybrid retrieval, temporal graph, LangGraph loops, citation validation, contradictions, 10k scaling).*
 
 ---
 
